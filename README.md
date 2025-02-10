@@ -1,16 +1,14 @@
-# pet_care
+```
+______    _   _____                
+| ___ \  | | /  __ \               
+| |_/ /__| |_| /  \/ __ _ _ __ ___ 
+|  __/ _ \ __| |    / _` | '__/ _ \
+| | |  __/ |_| \__/\ (_| | | |  __/
+\_|  \___|\__|\____/\__,_|_|  \___|
 
-A new Flutter project.
+```
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+# PetCare: Smart Recommendation System for Pet Owners
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+PetCare is a smart recommendation system for pet owners. Users fill out information about themselves and their pets, and the platform provides personalized recommendations for food, care products, and accessories. Additionally, a dedicated section offers detailed descriptions of the pet breeds registered by the user.
