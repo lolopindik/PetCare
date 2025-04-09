@@ -1,7 +1,7 @@
 name: pet_care
-description: "All info in the readme file"
+description: "no"
 
-publish_to: "none"
+publish_to: 'none' 
 
 version: 1.0.0+1
 
@@ -19,15 +19,6 @@ dependencies:
   flutter_svg: ^2.0.17
   gap: ^3.0.1
 
-  #* Firebase
-  flutterfire_cli: ^1.1.0
-  firebase_core: ^3.13.0
-  firebase_storage: ^12.4.5
-  firebase_auth: ^5.5.2
-
-  #! Used for contain all api's keys
-  flutter_dotenv: ^5.2.1
-
   #* Local storage
   hive_flutter: ^1.1.0
 
@@ -36,7 +27,7 @@ dependencies:
 
   #* Riverpod
   flutter_riverpod: ^2.6.1
-
+  
   #* Introduction
   introduction_screen: ^3.1.17
 
@@ -52,6 +43,7 @@ dev_dependencies:
   auto_route_generator: ^10.0.1
 
 flutter:
+
   uses-material-design: true
 
   assets:
