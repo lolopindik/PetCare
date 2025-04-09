@@ -33,29 +33,29 @@ class DefaultFirebaseOptions {
   }
 
   static FirebaseOptions web = FirebaseOptions(
-    apiKey: DotEnv().get('WEB_API_KEY'),
-    appId: DotEnv().get('WEB_API_KEY'),
-    messagingSenderId: DotEnv().get('MESSAGING_SENDER_ID'),
-    projectId: DotEnv().get('PROJEC_ID'),
-    authDomain: DotEnv().get('WEB_AUTH_DOMAIN'),
-    storageBucket: DotEnv().get('STORAGE_BUCKET'),
-    measurementId: DotEnv().get('WEB_MEASUREMENT_ID'),
+    apiKey: dotenv.get('WEB_API_KEY'),
+    appId: dotenv.get('WEB_API_KEY'),
+    messagingSenderId: dotenv.get('MESSAGING_SENDER_ID'),
+    projectId: dotenv.get('PROJEC_ID'),
+    authDomain: dotenv.get('WEB_AUTH_DOMAIN'),
+    storageBucket: dotenv.get('STORAGE_BUCKET'),
+    measurementId: dotenv.get('WEB_MEASUREMENT_ID'),
   );
 
   static FirebaseOptions android = FirebaseOptions(
-    apiKey: DotEnv().get('ADNROID_API_KEY'),
-    appId: DotEnv().get('1:185003222416:android:74f90f0e5dbd22bd473f15'),
-    messagingSenderId: DotEnv().get('MESSAGING_SENDER_ID'),
-    projectId: DotEnv().get('PROJEC_ID'),
-    storageBucket: DotEnv().get('STORAGE_BUCKET'),
+    apiKey: dotenv.get('ADNROID_API_KEY'),
+    appId: dotenv.get('ADNROID_APP_ID'),
+    messagingSenderId:dotenv.get('MESSAGING_SENDER_ID'),
+    projectId: dotenv.get('PROJEC_ID'),
+    storageBucket: dotenv.get('STORAGE_BUCKET'),
   );
 
   static FirebaseOptions ios = FirebaseOptions(
-    apiKey: DotEnv().get('IOS_API_KEY'),
-    appId:  DotEnv().get('IOS_API_ID'),
-    messagingSenderId:  DotEnv().get('MESSAGING_SENDER_ID'),
-    projectId:  DotEnv().get('PROJEC_ID'),
-    storageBucket:  DotEnv().get('STORAGE_BUCKET'),
-    iosBundleId:  DotEnv().get('IOS_BUNDLE_ID'),
+    apiKey: dotenv.get('IOS_API_KEY'),
+    appId: dotenv.get('IOS_API_ID'),
+    messagingSenderId: dotenv.get('MESSAGING_SENDER_ID'),
+    projectId: dotenv.get('PROJEC_ID'),
+    storageBucket: dotenv.get('STORAGE_BUCKET'),
+    iosBundleId: dotenv.get('IOS_BUNDLE_ID'),
   );
 }

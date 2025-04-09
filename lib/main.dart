@@ -5,17 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:pet_care/data/firebase/config/firebase_options.dart';
 import 'package:pet_care/logic/riverpod/observer.dart';
 import 'package:pet_care/logic/riverpod/theme_switcher.dart';
 import 'package:pet_care/presentation/routes/router.dart';
 
 Future main() async {
-  await DotEnv().load(fileName: ".env");
+  await dotenv.load(fileName: ".env");
   //* Firebase init
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   //* Local storage
   await Hive.initFlutter();
   var themebox = await Hive.openBox('AppTheme');
