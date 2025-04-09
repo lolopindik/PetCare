@@ -19,8 +19,8 @@ Future main() async {
   );
   //* Local storage
   await Hive.initFlutter();
-  var themebox = await Hive.openBox('AppTheme');
-
+  var themeBox= await Hive.openBox('AppTheme');
+  var firstentryBox = await Hive.openBox('Entry');
   runApp(ProviderScope(
     observers: [Observer()],
     child: MyApp(),
