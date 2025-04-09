@@ -14,6 +14,11 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
+  #* Other things
+  connectivity_plus: ^6.1.3
+  flutter_svg: ^2.0.17
+  gap: ^3.0.1
+
   #* Local storage
   hive_flutter: ^1.1.0
 
@@ -21,7 +26,6 @@ dependencies:
   auto_route: ^10.0.1
 
   #* Riverpod
-  riverpod: ^2.6.1
   flutter_riverpod: ^2.6.1
   
   #* Introduction
@@ -41,3 +45,6 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  assets:
+    - lib/logic/assets/imgs/logo.png
