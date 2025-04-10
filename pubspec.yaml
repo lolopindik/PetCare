@@ -56,4 +56,29 @@ flutter:
 
   assets:
     - .env
-    - lib/logic/assets/imgs/logo.png
+    # Images & icons
+    - lib/logic/src/assets/imgs/logo.png
+    - lib/logic/src/assets/imgs/welcome.png
+    - lib/logic/src/assets/icons/icon_dog&cat.png
+    - lib/logic/src/assets/icons/icon_pet_a_pet.png
+    - lib/logic/src/assets/icons/icon_title_1.png
+    - lib/logic/src/assets/icons/icon_title_2.png
+    - lib/logic/src/assets/icons/icon_documents.png
+    - lib/logic/src/assets/icons/icon_title_3.png
+    - lib/logic/src/assets/icons/icon_form.png
+    # Fonts
+    - lib/logic/src/fonts/Poppins/Poppins-Regular.ttf
+    - lib/logic/src/fonts/Poppins/Poppins-Bold.ttf
+    - lib/logic/src/fonts/Poppins/Poppins-Italic.ttf
+    - lib/logic/src/fonts/Poppins/Poppins-Light.ttf
+  
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: lib/logic/src/fonts/Poppins/Poppins-Regular.ttf
+        - asset: lib/logic/src/fonts/Poppins/Poppins-Bold.ttf
+          weight: 700
+        - asset: lib/logic/src/fonts/Poppins/Poppins-Italic.ttf
+          style: italic
+        - asset: lib/logic/src/fonts/Poppins/Poppins-Light.ttf
+          weight: 300

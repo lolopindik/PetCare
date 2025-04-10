@@ -32,7 +32,7 @@ class SplashPage {
       children: [
         Center(
           child: Image.asset(
-            'lib/logic/assets/imgs/logo.png',
+            'lib/logic/src/assets/imgs/logo.png',
             fit: BoxFit.contain,
           ),
         ),
