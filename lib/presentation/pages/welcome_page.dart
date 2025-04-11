@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:pet_care/logic/riverpod/intro.dart';
 
 class WelcomePage {
   
@@ -41,6 +43,7 @@ class WelcomePage {
   }
 
   Widget build(BuildContext context, WidgetRef ref) {
+
     return IntroductionScreen(
       pages: _pagesData.map((data) {
         return PageViewModel(
@@ -56,7 +59,10 @@ class WelcomePage {
           ),
         );
       }).toList(),
-      onDone: () {},
+      onDone: () {
+        ref.read(introProvider).markIntroAsSeen();
+        context.router.replacePath('/auth');
+      },
       showSkipButton: true,
       skip: const Text("Skip"),
       next: const Icon(Icons.arrow_forward),
