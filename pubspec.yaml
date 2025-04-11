@@ -23,7 +23,10 @@ dependencies:
   flutterfire_cli: ^1.1.0
   firebase_core: ^3.13.0
   firebase_storage: ^12.4.5
+  # Authentication with firebase
   firebase_auth: ^5.5.2
+  google_sign_in: ^6.3.0
+  email_validator: ^3.0.0
 
   #! Used for contain all api's keys
   flutter_dotenv: ^5.2.1
@@ -66,6 +69,7 @@ flutter:
     - lib/logic/src/assets/icons/icon_documents.png
     - lib/logic/src/assets/icons/icon_title_3.png
     - lib/logic/src/assets/icons/icon_form.png
+    - lib/logic/src/assets/icons/icon_google.png
     # Fonts
     - lib/logic/src/fonts/Poppins/Poppins-Regular.ttf
     - lib/logic/src/fonts/Poppins/Poppins-Bold.ttf

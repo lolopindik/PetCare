@@ -11,8 +11,8 @@ ThemeData lightMode = ThemeData(
     onSecondary: Colors.white, // Белый текст на розовом фоне
   ),
   textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: Colors.black), // Черный текст
-    bodyMedium: TextStyle(color: Colors.black), // Черный текст
+    bodyLarge: TextStyle(color: Colors.black, fontFamily: 'Poppins',), // Черный текст
+    bodyMedium: TextStyle(color: Colors.black, fontFamily: 'Poppins'), // Черный текст
   ),
 );
 
@@ -27,7 +27,7 @@ ThemeData darkMode = ThemeData(
     tertiary: Colors.grey, // Оставляем серый как дополнительный цвет
   ),
   textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: Colors.white), // Белый текст
-    bodyMedium: TextStyle(color: Colors.white), // Белый текст
+    bodyLarge: TextStyle(color: Colors.white, fontFamily: 'Poppins'), // Белый текст
+    bodyMedium: TextStyle(color: Colors.white, fontFamily: 'Poppins'), // Белый текст
   ),
 );
