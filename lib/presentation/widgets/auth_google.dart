@@ -6,6 +6,9 @@ class AuthGoogleWidget {
     return GestureDetector(
       onTap: func,
       child: Container(
+        constraints: BoxConstraints(
+          maxWidth: 400
+        ),
         width: MediaQuery.of(context).size.width * 0.6,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(
