@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:pet_care/logic/theme/theme_constrains.dart';
+import 'package:pet_care/logic/theme/theme.dart';
 
 
 final themeProvider = ChangeNotifierProvider<ThemeNotifier>((ref) {

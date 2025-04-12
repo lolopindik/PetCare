@@ -1,17 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:pet_care/logic/theme/theme_constants.dart';
 
-class LightModeColors {
-  static const Color mainColor = Color.fromARGB(255, 255, 255, 255); // White background
-  static const Color primaryColor = Color.fromARGB(255, 0, 196, 180); // Green #00C4B4
-  static const Color secondaryColor = Color.fromARGB(255, 255, 111, 97); // Pink #FF6F61
-  static const Color gradientTeal = Color.fromARGB(255, 56, 187, 108); // 0xFF38BB6C
-  static const Color gradientGrey = Color.fromARGB(255, 176, 190, 197); // Grey #B0BEC5
-}
+ThemeData lightMode = ThemeData(
+  brightness: Brightness.light,
+  colorScheme: ColorScheme.light(
+    surface: LightModeColors.mainColor, // White background
+    primary: LightModeColors.primaryColor, // Green #00C4B4
+    onPrimary: Colors.white, // White text on green background (e.g., for buttons)
+    secondary: LightModeColors.secondaryColor, // Pink #FF6F61
+    onSecondary: Colors.white, // White text on pink background
+    tertiary: LightModeColors.gradientTeal, // Teal #26A69A for gradient
+  ),
+  textTheme: const TextTheme(
+    bodyLarge: TextStyle(color: Colors.black, fontFamily: 'Poppins'), // Black text
+    bodyMedium: TextStyle(color: Colors.black, fontFamily: 'Poppins'), // Black text
+  ),
+);
 
-class DarkModeColors {
-  static const Color mainColor = Color.fromARGB(255, 31, 31, 31); // Dark background
-  static const Color primaryColor = Color.fromARGB(255, 0, 196, 180); // Green #00C4B4
-  static const Color secondaryColor = Color.fromARGB(255, 255, 111, 97); // Pink #FF6F61
-  static const Color gradientTeal = Color.fromARGB(255, 56, 187, 108); // 0xFF38BB6C
-  static const Color gradientGrey = Color.fromARGB(255, 176, 190, 197); // Grey #B0BEC5
-}
+ThemeData darkMode = ThemeData(
+  brightness: Brightness.dark,
+  colorScheme: ColorScheme.dark(
+    surface: DarkModeColors.mainColor, // Dark background
+    primary: DarkModeColors.primaryColor, // Green #00C4B4
+    onPrimary: Colors.white, // White text on green background
+    secondary: DarkModeColors.secondaryColor, // Pink #FF6F61
+    onSecondary: Colors.white, // White text on pink background
+    tertiary: DarkModeColors.gradientTeal, // Teal #26A69A for gradient
+  ),
+  textTheme: const TextTheme(
+    bodyLarge: TextStyle(color: Colors.white, fontFamily: 'Poppins'), // White text
+    bodyMedium: TextStyle(color: Colors.white, fontFamily: 'Poppins'), // White text
+  ),
+);

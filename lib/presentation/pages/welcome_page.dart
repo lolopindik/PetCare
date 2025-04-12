@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:pet_care/logic/riverpod/intro.dart';
+import 'package:pet_care/logic/theme/theme_constants.dart';
 
 class WelcomePage {
-  
   static const List<Map<String, dynamic>> _pagesData = [
     {
       'titlePath': 'lib/logic/src/assets/imgs/welcome.png',
@@ -33,9 +33,11 @@ class WelcomePage {
     },
   ];
 
-  Widget _buildImageWidget(BuildContext context, String path, double paddingFraction) {
+  Widget _buildImageWidget(
+      BuildContext context, String path, double paddingFraction) {
     return Padding(
-      padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * paddingFraction),
+      padding: EdgeInsets.only(
+          top: MediaQuery.of(context).size.height * paddingFraction),
       child: Center(
         child: Image.asset(path),
       ),
@@ -43,7 +45,6 @@ class WelcomePage {
   }
 
   Widget build(BuildContext context, WidgetRef ref) {
-
     return IntroductionScreen(
       pages: _pagesData.map((data) {
         return PageViewModel(
@@ -64,9 +65,13 @@ class WelcomePage {
         context.router.replacePath('/auth');
       },
       showSkipButton: true,
-      skip: const Text("Skip"),
+      skip: const Text(
+        "Skip",
+        style: TextStyle(color: LightModeColors.gradientTeal),
+      ),
       next: const Icon(Icons.arrow_forward),
-      done: const Text("Сontinue", style: TextStyle(fontWeight: FontWeight.w600)),
+      done:
+          const Text("Сontinue", style: TextStyle(fontWeight: FontWeight.w600)),
     );
   }
 }
