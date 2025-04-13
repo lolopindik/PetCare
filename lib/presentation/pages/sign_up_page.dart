@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -100,7 +101,10 @@ class SignUpPage {
                                   ),
                                   const Gap(24),
                                   ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      //todo add other logic
+                                      context.router.pushPath('/auth/verification');
+                                    },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor:
                                           LightModeColors.primaryColor,

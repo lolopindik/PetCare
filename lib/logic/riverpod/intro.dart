@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:pet_care/logic/funcs/debug_logger.dart';
 
 final introProvider = ChangeNotifierProvider<IntroNotifier>((ref) => IntroNotifier(
   
@@ -18,7 +19,7 @@ class IntroNotifier extends ChangeNotifier {
     _box = Hive.box('Entry');
     notifyListeners();
   } catch (e) {
-    debugPrint('Hive initialization failed: $e');
+    DebugLogger.print('Hive initialization failed: $e');
   }
 }
 

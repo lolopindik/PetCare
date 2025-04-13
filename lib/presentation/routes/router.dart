@@ -23,5 +23,13 @@ class AppRouter extends RootStackRouter {
           page: AuthRoute.page,
           path: '/auth',
         ),
+        AutoRoute(
+          page: VerifyRoute.page,
+          path: '/auth/verification',
+        ),
+        AutoRoute(
+          page: RecoveryRoute.page,
+          path: '/auth/recovery',
+        ),
       ];
 }

@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pet_care/logic/funcs/debug_logger.dart';
 
 class Observer extends ProviderObserver {
   static const String reset = '\x1B[0m';
@@ -15,9 +15,7 @@ class Observer extends ProviderObserver {
     ProviderContainer container,
   ) {
     super.didUpdateProvider(provider, previousValue, newValue, container);
-    debugPrint(
-      '$cyan🔄 [Provider Updated] ${provider.name ?? provider.runtimeType}: $newValue$reset',
-    );
+    DebugLogger.print('$cyan🔄 [Provider Updated] ${provider.name ?? provider.runtimeType}: $newValue$reset',);
   }
 
   @override
@@ -27,9 +25,7 @@ class Observer extends ProviderObserver {
     ProviderContainer container,
   ) {
     super.didAddProvider(provider, value, container);
-    debugPrint(
-      '$green✅ [Provider Added] ${provider.name ?? provider.runtimeType}: $value$reset',
-    );
+    DebugLogger.print('$green✅ [Provider Added] ${provider.name ?? provider.runtimeType}: $value$reset',);
   }
 
   @override
@@ -38,8 +34,6 @@ class Observer extends ProviderObserver {
     ProviderContainer container,
   ) {
     super.didDisposeProvider(provider, container);
-    debugPrint(
-      '$red❌ [Provider Disposed] ${provider.name ?? provider.runtimeType}$reset',
-    );
+    DebugLogger.print('$red❌ [Provider Disposed] ${provider.name ?? provider.runtimeType}$reset',);
   }
 }
