@@ -1,13 +1,28 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:pet_care/logic/funcs/debug_logger.dart';
+import 'package:pet_care/logic/riverpod/textfield_handler.dart';
+import 'package:pet_care/logic/services/firebase/authentication_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 import 'package:pet_care/presentation/widgets/auth_google.dart';
 import 'package:pet_care/presentation/widgets/auth_textfield.dart';
 
 class SignUpPage {
   Widget build(BuildContext context, WidgetRef ref) {
+    
+    final controllerUserName =
+        ref.watch(textFieldControllerProvider('signUpUsername'));
+    final controllerEmail =
+        ref.watch(textFieldControllerProvider('signUpEmail'));
+    final passwordllerEmail =
+        ref.watch(textFieldControllerProvider('signUpPassword'));
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: SafeArea(
@@ -47,12 +62,14 @@ class SignUpPage {
                           children: [
                             Text(
                               'Sign Up',
-                              style:
-                                  Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                        fontSize: 32,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    fontSize: 32,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                             const Gap(20),
                             Container(
@@ -101,9 +118,31 @@ class SignUpPage {
                                   ),
                                   const Gap(24),
                                   ElevatedButton(
-                                    onPressed: () {
-                                      //todo add other logic
-                                      context.router.pushPath('/auth/verification');
+                                    onPressed: () async {
+                                      try {
+                                        await EmailSignUpService().signUp(
+                                            emailAddress: controllerEmail.text,
+                                            password: passwordllerEmail.text);
+
+                                        final user =
+                                            FirebaseAuth.instance.currentUser;
+
+                                        if (user != null) {
+
+                                          DatabaseReference dbRef =
+                                              FirebaseDatabase.instance.ref(
+                                                  'userDetails/${user.uid}');
+
+                                          await dbRef.set({
+                                            "name": controllerUserName.text,
+                                          });
+
+                                          context.router.pushPath('/auth/verification');
+                                        }
+                                      } catch (e) {
+                                        DebugLogger.print(
+                                            '\x1B[31m(error) On sign up screen: $e');
+                                      }
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor:

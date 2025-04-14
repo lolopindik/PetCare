@@ -31,5 +31,9 @@ class AppRouter extends RootStackRouter {
           page: RecoveryRoute.page,
           path: '/auth/recovery',
         ),
+        AutoRoute(
+          page: HomeRoute.page,
+          path: '/home',
+        ),
       ];
 }

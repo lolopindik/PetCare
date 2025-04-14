@@ -1,11 +1,13 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unused_import
 
 import 'package:auto_route/auto_route.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_care/logic/riverpod/connectivity.dart';
 import 'package:pet_care/logic/riverpod/intro.dart';
+import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/presentation/routes/router.gr.dart';
 
 class SplashPage {
@@ -13,17 +15,21 @@ class SplashPage {
     Future.microtask(() async {
       final connectivity = ref.watch(connectivityProvider);
       final hasInternet = connectivity != ConnectivityResult.none;
+      final user = FirebaseAuth.instance.currentUser;
 
       if (!hasInternet) {
-        //* can add snackbar
+        // SnackbarServices.showErrorSnackbar(context, 'No internet connection');
         return;
       }
 
       final hasSeenIntro = await ref.read(introProvider).hasSeenIntro;
 
-      if (!hasSeenIntro) {
+      if (!hasSeenIntro && user == null) {
         context.router.replace(const WelcomeRoute());
-      } else {
+      } else if (user != null) {
+        context.router.replace(const HomeRoute());
+      }
+      else {
         context.router.replace(const AuthRoute());
       }
     });

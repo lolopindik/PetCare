@@ -1,13 +1,26 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:pet_care/logic/funcs/debug_logger.dart';
+import 'package:pet_care/logic/riverpod/textfield_handler.dart';
+import 'package:pet_care/logic/services/firebase/authentication_service.dart';
+import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 import 'package:pet_care/presentation/widgets/auth_google.dart';
 import 'package:pet_care/presentation/widgets/auth_textfield.dart';
 
 class SignInPage {
   Widget build(BuildContext context, WidgetRef ref) {
+    
+    final controllerEmail =
+        ref.watch(textFieldControllerProvider('signInEmail'));
+    final passwordllerEmail =
+        ref.watch(textFieldControllerProvider('signInPassword'));
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: SafeArea(
@@ -87,7 +100,23 @@ class SignInPage {
                                   ),
                                   const Gap(24),
                                   ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      try{
+                                        await EmailSignInService().signIn(
+                                          emailAddress: controllerEmail.text,
+                                          password: passwordllerEmail.text);
+
+                                        final user = FirebaseAuth.instance.currentUser;
+                                        
+                                        if (user != null){
+                                          SnackbarServices.showSuccessSnackbar(context, 'Succes sign in');
+                                          context.router.replacePath('/home');
+                                          DebugLogger.print('\x1B[32mSucces sign in');
+                                        }
+                                      }catch(e){
+                                        DebugLogger.print('\x1B[31m(error) On sign in screen: $e');
+                                      }
+                                    },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor:
                                           LightModeColors.primaryColor,
@@ -116,7 +145,8 @@ class SignInPage {
                   AuthGoogleWidget().build(context, () {}),
                   Gap(80),
                   TextButton(
-                      onPressed: ()=> context.router.pushPath('/auth/recovery'),
+                      onPressed: () =>
+                          context.router.pushPath('/auth/recovery'),
                       child: Text('Forgot password?',
                           style: TextStyle(
                             decoration: TextDecoration.underline,

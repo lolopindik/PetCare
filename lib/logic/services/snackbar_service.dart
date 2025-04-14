@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_care/logic/funcs/debug_logger.dart';
 
 class SnackbarServices {
   static void showSnackbar(
@@ -21,7 +22,7 @@ class SnackbarServices {
         ),
       );
     } else {
-      debugPrint('Widget is no longer mounted. Snackbar skipped.');
+      DebugLogger.print('Widget is no longer mounted. Snackbar skipped.');
     }
   }
 

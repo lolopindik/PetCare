@@ -39,6 +39,7 @@ class DefaultFirebaseOptions {
     projectId: dotenv.get('PROJEC_ID'),
     authDomain: dotenv.get('WEB_AUTH_DOMAIN'),
     storageBucket: dotenv.get('STORAGE_BUCKET'),
+    databaseURL: dotenv.get('DATABASE_URL'),
     measurementId: dotenv.get('WEB_MEASUREMENT_ID'),
   );
 
@@ -47,6 +48,7 @@ class DefaultFirebaseOptions {
     appId: dotenv.get('ADNROID_APP_ID'),
     messagingSenderId:dotenv.get('MESSAGING_SENDER_ID'),
     projectId: dotenv.get('PROJEC_ID'),
+    databaseURL: dotenv.get('DATABASE_URL'),
     storageBucket: dotenv.get('STORAGE_BUCKET'),
   );
 
@@ -56,6 +58,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: dotenv.get('MESSAGING_SENDER_ID'),
     projectId: dotenv.get('PROJEC_ID'),
     storageBucket: dotenv.get('STORAGE_BUCKET'),
+    databaseURL: dotenv.get('DATABASE_URL'),
     iosBundleId: dotenv.get('IOS_BUNDLE_ID'),
   );
 }
