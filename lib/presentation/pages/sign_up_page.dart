@@ -9,19 +9,21 @@ import 'package:gap/gap.dart';
 import 'package:pet_care/logic/funcs/debug_logger.dart';
 import 'package:pet_care/logic/riverpod/textfield_handler.dart';
 import 'package:pet_care/logic/services/firebase/authentication_service.dart';
+import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 import 'package:pet_care/presentation/widgets/auth_google.dart';
 import 'package:pet_care/presentation/widgets/auth_textfield.dart';
 
 class SignUpPage {
   Widget build(BuildContext context, WidgetRef ref) {
-    
     final controllerUserName =
         ref.watch(textFieldControllerProvider('signUpUsername'));
     final controllerEmail =
         ref.watch(textFieldControllerProvider('signUpEmail'));
     final passwordllerEmail =
         ref.watch(textFieldControllerProvider('signUpPassword'));
+    final confirmPasswordllerEmail =
+        ref.watch(textFieldControllerProvider('signUpConfirmPassword'));
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -127,17 +129,30 @@ class SignUpPage {
                                         final user =
                                             FirebaseAuth.instance.currentUser;
 
-                                        if (user != null) {
+                                        if (passwordllerEmail.text !=
+                                            confirmPasswordllerEmail.text) {
+                                          SnackbarServices.showErrorSnackbar(
+                                              context,
+                                              'The passwords do not match');
+                                          return;
+                                        }
 
+                                        if (user != null) {
                                           DatabaseReference dbRef =
                                               FirebaseDatabase.instance.ref(
                                                   'userDetails/${user.uid}');
 
                                           await dbRef.set({
                                             "name": controllerUserName.text,
+                                            "verify": false
                                           });
 
-                                          context.router.pushPath('/auth/verification');
+                                          context.router
+                                              .pushPath('/auth/verification');
+                                        } else {
+                                          SnackbarServices.showWarningSnackbar(
+                                              context, 'Try later');
+                                          return;
                                         }
                                       } catch (e) {
                                         DebugLogger.print(

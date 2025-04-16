@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_care/logic/riverpod/connectivity.dart';
 import 'package:pet_care/logic/riverpod/intro.dart';
+import 'package:pet_care/logic/riverpod/verification.dart';
 import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/presentation/routes/router.gr.dart';
 
@@ -15,6 +16,8 @@ class SplashPage {
     Future.microtask(() async {
       final connectivity = ref.watch(connectivityProvider);
       final hasInternet = connectivity != ConnectivityResult.none;
+      final verifiedNotifier = ref.read(verifiedProvider.notifier);
+      final hasverified = await verifiedNotifier.hasVerified;
       final user = FirebaseAuth.instance.currentUser;
 
       if (!hasInternet) {
@@ -26,10 +29,11 @@ class SplashPage {
 
       if (!hasSeenIntro && user == null) {
         context.router.replace(const WelcomeRoute());
-      } else if (user != null) {
+      } else if (user != null && hasverified == true) {
         context.router.replace(const HomeRoute());
-      }
-      else {
+      } else if (user != null && hasverified == false) {
+        context.router.replace(const VerifyRoute());
+      } else {
         context.router.replace(const AuthRoute());
       }
     });
