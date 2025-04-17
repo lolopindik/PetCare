@@ -144,6 +144,7 @@ class SignUpPage {
 
                                           await dbRef.set({
                                             "name": controllerUserName.text,
+                                            "email": controllerEmail.text,
                                             "verify": false
                                           });
 

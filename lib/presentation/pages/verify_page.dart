@@ -1,8 +1,18 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:pet_care/logic/riverpod/delete_data.dart';
+import 'package:pet_care/logic/riverpod/email.dart';
 
 class VerifyPage {
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    final user = FirebaseAuth.instance.currentUser;
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final email = ref.watch(emailProvider).email ?? "Loding...";
+
     return SafeArea(
       child: Center(
         child: Padding(
@@ -15,7 +25,7 @@ class VerifyPage {
                 size: 80,
                 color: Theme.of(context).colorScheme.secondaryContainer,
               ),
-              const SizedBox(height: 24),
+              const Gap(24),
               Text(
                 "Verify Your Email",
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -36,7 +46,7 @@ class VerifyPage {
                   ),
                 ),
                 child: Text(
-                  "Some email :)",
+                  email.toString(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontSize: 16,
                       ),
@@ -45,7 +55,10 @@ class VerifyPage {
               ),
               const Gap(24),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await FirebaseAuth.instance.setLanguageCode("en");
+                  await user?.sendEmailVerification();
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -64,7 +77,12 @@ class VerifyPage {
               ),
               const Gap(16),
               TextButton(
-                onPressed: () {},
+                onPressed: () async {
+                  ref
+                      .read(userDeletionProvider.notifier)
+                      .deleteUserDataImmediately(userId!);
+                      context.router.replacePath('/auth');
+                },
                 child: Text(
                   "Back to Login",
                   style: TextStyle(
