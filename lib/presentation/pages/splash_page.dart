@@ -17,7 +17,6 @@ class SplashPage {
       final connectivity = ref.watch(connectivityProvider);
       final hasInternet = connectivity != ConnectivityResult.none;
       final verifiedNotifier = ref.read(verifiedProvider.notifier);
-      final hasverified = await verifiedNotifier.hasVerified;
       final user = FirebaseAuth.instance.currentUser;
 
       if (!hasInternet) {
@@ -25,13 +24,21 @@ class SplashPage {
         return;
       }
 
+      if (user != null) {
+        await user.reload();
+        final updatedUser = FirebaseAuth.instance.currentUser;
+        final isEmailVerified = updatedUser?.emailVerified ?? false;
+        await verifiedNotifier.setVerified(isEmailVerified);
+      }
+
       final hasSeenIntro = await ref.read(introProvider).hasSeenIntro;
+      final hasVerified = await verifiedNotifier.hasVerified;
 
       if (!hasSeenIntro && user == null) {
         context.router.replace(const WelcomeRoute());
-      } else if (user != null && hasverified == true) {
+      } else if (user != null && hasVerified) {
         context.router.replace(const HomeRoute());
-      } else if (user != null && hasverified == false) {
+      } else if (user != null && !hasVerified) {
         context.router.replace(const VerifyRoute());
       } else {
         context.router.replace(const AuthRoute());

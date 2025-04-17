@@ -109,6 +109,9 @@ class SignInPage {
                                         final user = FirebaseAuth.instance.currentUser;
                                         
                                         if (user != null){
+
+                                          await user.reload();
+                                          
                                           SnackbarServices.showSuccessSnackbar(context, 'Succes sign in');
                                           context.router.replacePath('/home');
                                           DebugLogger.print('\x1B[32mSucces sign in');

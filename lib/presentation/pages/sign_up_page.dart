@@ -138,6 +138,7 @@ class SignUpPage {
                                         }
 
                                         if (user != null) {
+
                                           DatabaseReference dbRef =
                                               FirebaseDatabase.instance.ref(
                                                   'userDetails/${user.uid}');
@@ -149,7 +150,7 @@ class SignUpPage {
                                           });
 
                                           context.router
-                                              .pushPath('/auth/verification');
+                                              .replacePath('/auth/verification');
                                         } else {
                                           SnackbarServices.showWarningSnackbar(
                                               context, 'Try later');
