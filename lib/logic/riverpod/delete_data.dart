@@ -39,6 +39,7 @@ class UserDeletionNotifier extends StateNotifier<bool> {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null && user.uid == userId) {
         await user.delete();
+        await FirebaseAuth.instance.signOut();
       }
     } catch (e) {
       DebugLogger.print('Error deleting user data or account: $e');

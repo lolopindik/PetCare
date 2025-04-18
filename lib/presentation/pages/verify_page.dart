@@ -14,19 +14,32 @@ import 'package:pet_care/presentation/routes/router.gr.dart';
 
 class VerifyPage {
   Widget build(BuildContext context, WidgetRef ref) {
-
     final user = FirebaseAuth.instance.currentUser;
     final userId = user?.uid;
     final email = ref.watch(emailProvider).email ?? "Loading...";
     final verifiedNotifier = ref.read(verifiedProvider.notifier);
 
     Timer? verificationTimer;
+
+    // Check user state and redirect if necessary
+    void checkInitialState() async {
+      if (user == null) {
+        verificationTimer?.cancel();
+        SnackbarServices.showErrorSnackbar(context, 'No user signed in');
+        context.router.replace(const AuthRoute());
+        return;
+      }
+      final isVerified = await verifiedNotifier.hasVerified;
+      if (isVerified) {
+        verificationTimer?.cancel();
+        context.router.replacePath('/home');
+      }
+    }
+
     void startVerificationCheck() {
       verificationTimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
-        await user?.reload();
-        final updatedUser = FirebaseAuth.instance.currentUser;
-        if (updatedUser?.emailVerified ?? false) {
-          await verifiedNotifier.setVerified(true);
+        final isVerified = await verifiedNotifier.hasVerified;
+        if (isVerified) {
           timer.cancel();
           context.router.replacePath('/home');
         }
@@ -34,6 +47,7 @@ class VerifyPage {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkInitialState();
       startVerificationCheck();
     });
 
@@ -66,9 +80,7 @@ class VerifyPage {
                 ),
                 const Gap(16),
                 Container(
-                  constraints: BoxConstraints(
-                    maxWidth: 400
-                  ),
+                  constraints: const BoxConstraints(maxWidth: 400),
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -96,7 +108,7 @@ class VerifyPage {
                           context, 'Verification email sent');
                     } catch (e) {
                       SnackbarServices.showErrorSnackbar(
-                          context, 'Failed to send verification email');
+                          context, e.toString().replaceFirst('Exception: ', ''));
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -118,9 +130,11 @@ class VerifyPage {
                 const Gap(16),
                 TextButton(
                   onPressed: () async {
-                    await ref
-                        .read(userDeletionProvider.notifier)
-                        .deleteUserDataImmediately(userId!);
+                    if (userId != null) {
+                      await ref
+                          .read(userDeletionProvider.notifier)
+                          .deleteUserDataImmediately(userId);
+                    }
                     dispose(); // Clean up timer
                     context.router.replace(const AuthRoute());
                   },

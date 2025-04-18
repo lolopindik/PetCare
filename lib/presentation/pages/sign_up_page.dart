@@ -77,9 +77,7 @@ class SignUpPage {
                             Container(
                               padding: const EdgeInsets.all(20),
                               decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .surface, // White or dark grey
+                                color: Theme.of(context).colorScheme.surface,
                                 borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(30),
                                   bottomRight: Radius.circular(30),
@@ -122,23 +120,23 @@ class SignUpPage {
                                   ElevatedButton(
                                     onPressed: () async {
                                       try {
-                                        await EmailSignUpService().signUp(
-                                            emailAddress: controllerEmail.text,
-                                            password: passwordllerEmail.text);
-
-                                        final user =
-                                            FirebaseAuth.instance.currentUser;
-
-                                        if (passwordllerEmail.text !=
-                                            confirmPasswordllerEmail.text) {
+                                        if (passwordllerEmail.text.trim() !=
+                                            confirmPasswordllerEmail.text.trim()) {
                                           SnackbarServices.showErrorSnackbar(
                                               context,
                                               'The passwords do not match');
                                           return;
                                         }
 
-                                        if (user != null) {
+                                        await EmailSignUpService().signUp(
+                                          emailAddress: controllerEmail.text.trim(),
+                                          password: passwordllerEmail.text.trim(),
+                                        );
 
+                                        final user =
+                                            FirebaseAuth.instance.currentUser;
+
+                                        if (user != null) {
                                           DatabaseReference dbRef =
                                               FirebaseDatabase.instance.ref(
                                                   'userDetails/${user.uid}');
@@ -146,17 +144,20 @@ class SignUpPage {
                                           await dbRef.set({
                                             "name": controllerUserName.text,
                                             "email": controllerEmail.text,
-                                            "verify": false
+                                            "verify": false,
                                           });
 
                                           context.router
                                               .replacePath('/auth/verification');
                                         } else {
-                                          SnackbarServices.showWarningSnackbar(
-                                              context, 'Try later');
+                                          SnackbarServices.showErrorSnackbar(
+                                              context,
+                                              'Sign-up failed. Please try again.');
                                           return;
                                         }
                                       } catch (e) {
+                                        SnackbarServices.showErrorSnackbar(
+                                            context, 'Error: $e');
                                         DebugLogger.print(
                                             '\x1B[31m(error) On sign up screen: $e');
                                       }

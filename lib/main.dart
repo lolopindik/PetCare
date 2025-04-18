@@ -14,9 +14,12 @@ Future main() async {
   await dotenv.load(fileName: ".env");
   //* Firebase init
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      name: "pet_care",
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
   //* Local storage
   await Hive.initFlutter();
   var themeBox= await Hive.openBox('AppTheme');
@@ -32,6 +35,7 @@ class MyApp extends ConsumerWidget {
   
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final appRouter = AppRouter(ref);
 
     return MaterialApp.router(

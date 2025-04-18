@@ -103,14 +103,12 @@ class SignInPage {
                                     onPressed: () async {
                                       try{
                                         await EmailSignInService().signIn(
-                                          emailAddress: controllerEmail.text,
-                                          password: passwordllerEmail.text);
+                                          emailAddress: controllerEmail.text.trim(),
+                                          password: passwordllerEmail.text.trim());
 
                                         final user = FirebaseAuth.instance.currentUser;
                                         
                                         if (user != null){
-
-                                          await user.reload();
                                           
                                           SnackbarServices.showSuccessSnackbar(context, 'Succes sign in');
                                           context.router.replacePath('/home');
