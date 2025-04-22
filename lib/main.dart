@@ -20,7 +20,7 @@ Future main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
-  //* For web deploy
+  // //* For web deploy
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.web
   // );

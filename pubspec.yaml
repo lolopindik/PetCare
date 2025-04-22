@@ -26,8 +26,10 @@ dependencies:
   firebase_database: ^11.3.5
   # Authentication with firebase
   firebase_auth: ^5.5.2
-  google_sign_in: ^6.3.0
   email_validator: ^3.0.0
+  # Authentication with Google
+  google_sign_in: ^6.3.0
+  google_sign_in_web: ^0.12.4+4
 
   #! Used for contain all api's keys
   flutter_dotenv: ^5.2.1
