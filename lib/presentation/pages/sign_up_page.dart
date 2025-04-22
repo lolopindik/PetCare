@@ -9,6 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:pet_care/logic/funcs/debug_logger.dart';
 import 'package:pet_care/logic/riverpod/textfield_handler.dart';
 import 'package:pet_care/logic/services/firebase/authentication_service.dart';
+import 'package:pet_care/logic/services/google_auth_service.dart';
 import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 import 'package:pet_care/presentation/widgets/auth_google.dart';
@@ -16,6 +17,7 @@ import 'package:pet_care/presentation/widgets/auth_textfield.dart';
 
 class SignUpPage {
   Widget build(BuildContext context, WidgetRef ref) {
+
     final controllerUserName =
         ref.watch(textFieldControllerProvider('signUpUsername'));
     final controllerEmail =
@@ -121,7 +123,8 @@ class SignUpPage {
                                     onPressed: () async {
                                       try {
                                         if (passwordllerEmail.text.trim() !=
-                                            confirmPasswordllerEmail.text.trim()) {
+                                            confirmPasswordllerEmail.text
+                                                .trim()) {
                                           SnackbarServices.showErrorSnackbar(
                                               context,
                                               'The passwords do not match');
@@ -129,8 +132,10 @@ class SignUpPage {
                                         }
 
                                         await EmailSignUpService().signUp(
-                                          emailAddress: controllerEmail.text.trim(),
-                                          password: passwordllerEmail.text.trim(),
+                                          emailAddress:
+                                              controllerEmail.text.trim(),
+                                          password:
+                                              passwordllerEmail.text.trim(),
                                         );
 
                                         final user =
@@ -147,8 +152,8 @@ class SignUpPage {
                                             "verify": false,
                                           });
 
-                                          context.router
-                                              .replacePath('/auth/verification');
+                                          context.router.replacePath(
+                                              '/auth/verification');
                                         } else {
                                           SnackbarServices.showErrorSnackbar(
                                               context,
@@ -187,7 +192,21 @@ class SignUpPage {
                     ),
                   ),
                   const Gap(30),
-                  AuthGoogleWidget().build(context, () {}),
+                  AuthGoogleWidget().build(
+                    context,
+                    () async {
+                      final user = await GoogleAuthService().signInWithGoogle();
+                      if (user != null) {
+                        SnackbarServices.showSuccessSnackbar(
+                            context, 'Signed up with Google');
+                        context.router.replacePath('/home');
+                      } else {
+                        SnackbarServices.showErrorSnackbar(
+                            context, 'Google Sign-Up failed');
+                      }
+                    },
+                    'Sign up with Google'
+                  ),
                 ],
               ),
             ),

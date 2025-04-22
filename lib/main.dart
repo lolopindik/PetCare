@@ -20,6 +20,10 @@ Future main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
+  //* For web deploy
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.web
+  // );
   //* Local storage
   await Hive.initFlutter();
   var themeBox= await Hive.openBox('AppTheme');

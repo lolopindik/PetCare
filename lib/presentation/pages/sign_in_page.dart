@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:pet_care/logic/funcs/debug_logger.dart';
 import 'package:pet_care/logic/riverpod/textfield_handler.dart';
 import 'package:pet_care/logic/services/firebase/authentication_service.dart';
+import 'package:pet_care/logic/services/google_auth_service.dart';
 import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 import 'package:pet_care/presentation/widgets/auth_google.dart';
@@ -15,11 +16,9 @@ import 'package:pet_care/presentation/widgets/auth_textfield.dart';
 
 class SignInPage {
   Widget build(BuildContext context, WidgetRef ref) {
-    
-    final controllerEmail =
-        ref.watch(textFieldControllerProvider('signInEmail'));
-    final passwordllerEmail =
-        ref.watch(textFieldControllerProvider('signInPassword'));
+
+    final controllerEmail = ref.watch(textFieldControllerProvider('signInEmail'));
+    final controllerPassword = ref.watch(textFieldControllerProvider('signInPassword'));
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -34,9 +33,7 @@ class SignInPage {
                   Gap(MediaQuery.of(context).size.height * 0.2),
                   Center(
                     child: ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        maxWidth: 400,
-                      ),
+                      constraints: const BoxConstraints(maxWidth: 400),
                       child: Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
@@ -62,10 +59,7 @@ class SignInPage {
                           children: [
                             Text(
                               'Login',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     fontSize: 32,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -101,26 +95,28 @@ class SignInPage {
                                   const Gap(24),
                                   ElevatedButton(
                                     onPressed: () async {
-                                      try{
+                                      try {
                                         await EmailSignInService().signIn(
                                           emailAddress: controllerEmail.text.trim(),
-                                          password: passwordllerEmail.text.trim());
+                                          password: controllerPassword.text.trim(),
+                                        );
 
                                         final user = FirebaseAuth.instance.currentUser;
-                                        
-                                        if (user != null){
-                                          
-                                          SnackbarServices.showSuccessSnackbar(context, 'Succes sign in');
+
+                                        if (user != null) {
+                                          SnackbarServices.showSuccessSnackbar(
+                                              context, 'Success sign in');
                                           context.router.replacePath('/home');
-                                          DebugLogger.print('\x1B[32mSucces sign in');
+                                          DebugLogger.print('\x1B[32mSuccess sign in');
                                         }
-                                      }catch(e){
-                                        DebugLogger.print('\x1B[31m(error) On sign in screen: $e');
+                                      } catch (e) {
+                                        SnackbarServices.showErrorSnackbar(context, 'Error: $e');
+                                        DebugLogger.print(
+                                            '\x1B[31m(error) On sign in screen: $e');
                                       }
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          LightModeColors.primaryColor,
+                                      backgroundColor: LightModeColors.primaryColor,
                                       foregroundColor: Colors.white,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 40, vertical: 15),
@@ -130,8 +126,7 @@ class SignInPage {
                                     ),
                                     child: const Text(
                                       'Continue',
-                                      style: TextStyle(
-                                          fontSize: 16, fontFamily: 'Poppins'),
+                                      style: TextStyle(fontSize: 16, fontFamily: 'Poppins'),
                                     ),
                                   ),
                                 ],
@@ -143,15 +138,27 @@ class SignInPage {
                     ),
                   ),
                   const Gap(30),
-                  AuthGoogleWidget().build(context, () {}),
-                  Gap(80),
+                  AuthGoogleWidget().build(
+                    context,
+                    () async {
+                      final user = await GoogleAuthService().signInWithGoogle();
+                      if (user != null) {
+                        SnackbarServices.showSuccessSnackbar(context, 'Signed in with Google');
+                        context.router.replacePath('/home');
+                      } else {
+                        SnackbarServices.showErrorSnackbar(context, 'Google Sign-In failed');
+                      }
+                    },
+                      'Sign in with Google'
+                  ),
+                  const Gap(80),
                   TextButton(
-                      onPressed: () =>
-                          context.router.pushPath('/auth/recovery'),
-                      child: Text('Forgot password?',
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                          )))
+                    onPressed: () => context.router.pushPath('/auth/recovery'),
+                    child: const Text(
+                      'Forgot password?',
+                      style: TextStyle(decoration: TextDecoration.underline),
+                    ),
+                  ),
                 ],
               ),
             ),

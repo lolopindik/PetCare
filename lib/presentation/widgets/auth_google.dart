@@ -2,23 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class AuthGoogleWidget {
-  Widget build(BuildContext context, VoidCallback func) {
+  Widget build(BuildContext context, VoidCallback onTap, String title) {
     return GestureDetector(
-      onTap: func,
+      onTap: onTap,
       child: Container(
-        constraints: BoxConstraints(
-          maxWidth: 350
-        ),
+        constraints: const BoxConstraints(maxWidth: 350),
         width: MediaQuery.of(context).size.width * 0.6,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(30),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Colors.black,
               blurRadius: 8,
-              offset: const Offset(0, 2),
+              offset: Offset(0, 2),
             ),
           ],
         ),
@@ -39,9 +37,9 @@ class AuthGoogleWidget {
                 fit: BoxFit.contain,
               ),
             ),
-            const Gap(12), // Fixed spacing
+            const Gap(12),
             Text(
-              'Sign in with Google',
+              title,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
