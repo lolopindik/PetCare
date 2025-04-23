@@ -11,7 +11,8 @@ abstract class AuthenticationService {
 
 class EmailSignUpService implements AuthenticationService {
   @override
-  Future<void> signUp({required String emailAddress, required String password}) async {
+  Future<void> signUp(
+      {required String emailAddress, required String password}) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailAddress,
@@ -32,7 +33,8 @@ class EmailSignUpService implements AuthenticationService {
 
   @override
   Future<void> signIn({String? emailAddress, String? password}) async {
-    throw UnimplementedError('Use EmailSignInService for signing in with email and password');
+    throw UnimplementedError(
+        'Use EmailSignInService for signing in with email and password');
   }
 }
 
@@ -61,8 +63,10 @@ class EmailSignInService implements AuthenticationService {
   }
 
   @override
-  Future<void> signUp({required String emailAddress, required String password}) async {
-    throw UnimplementedError('Use EmailSignUpService for signing up with email and password');
+  Future<void> signUp(
+      {required String emailAddress, required String password}) async {
+    throw UnimplementedError(
+        'Use EmailSignUpService for signing up with email and password');
   }
 }
 
@@ -79,7 +83,8 @@ class GoogleSignInService implements AuthenticationService {
         return;
       }
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -95,7 +100,25 @@ class GoogleSignInService implements AuthenticationService {
   }
 
   @override
-  Future<void> signUp({required String emailAddress, required String password}) async {
-    throw UnimplementedError('Google Sign-In does not support email/password sign-up');
+  Future<void> signUp(
+      {required String emailAddress, required String password}) async {
+    throw UnimplementedError(
+        'Google Sign-In does not support email/password sign-up');
+  }
+}
+
+class PasswordReset implements AuthenticationService{
+  Future<void> resetPassword(String email) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
+  
+  @override
+  Future<void> signIn({String? emailAddress, String? password}) {
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<void> signUp({required String emailAddress, required String password}) {
+    throw UnimplementedError();
   }
 }
