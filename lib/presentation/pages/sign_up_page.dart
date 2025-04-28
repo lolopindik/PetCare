@@ -150,6 +150,7 @@ class SignUpPage {
                                             "name": controllerUserName.text,
                                             "email": controllerEmail.text,
                                             "verify": false,
+                                            "hasPetProfile ": false
                                           });
 
                                           context.router.replacePath(

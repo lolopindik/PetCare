@@ -24,7 +24,7 @@ class SplashPage {
         return;
       }
 
-      if (user != null) {
+      if (user != null && hasInternet) {
         await user.reload();
         final updatedUser = FirebaseAuth.instance.currentUser;
         final isEmailVerified = updatedUser?.emailVerified ?? false;
