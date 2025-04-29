@@ -35,5 +35,9 @@ class AppRouter extends RootStackRouter {
           page: HomeRoute.page,
           path: '/home',
         ),
+        AutoRoute(
+          page: PetFormRoute.page,
+          path: '/form_for_pet'
+        )
       ];
 }

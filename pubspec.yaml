@@ -19,6 +19,7 @@ dependencies:
   skeletonizer: ^1.4.3
   flutter_svg: ^2.0.17
   gap: ^3.0.1
+  linear_progress_bar: ^1.2.0
 
   #* Firebase
   flutterfire_cli: ^1.1.0

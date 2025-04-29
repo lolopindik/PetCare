@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_care/logic/riverpod/animations.dart';
@@ -36,8 +37,7 @@ class TemporaryPage {
               curve: Curves.easeOutBack,
               child: GestureDetector(
                 onTap: () {
-                  // todo: add navigation to form
-                  debugPrint('Add pet profile');
+                  context.router.replacePath('/form_for_pet');
                 },
                 child: Transform.rotate(
                   angle: isVisible ? -0.03 : -0.06,

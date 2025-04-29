@@ -704,6 +704,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
+  linear_progress_bar:
+    dependency: "direct main"
+    description:
+      name: linear_progress_bar
+      sha256: "8265c87323e661092adc96ae04d18072c34dce318b586965c3818d5d979f60d6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   lints:
     dependency: transitive
     description:

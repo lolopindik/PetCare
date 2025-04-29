@@ -4,7 +4,9 @@ class HomePage {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Center(
-      child: FlutterLogo())
+      child: FlutterLogo(
+        size: 123,
+      ))
     );
   }
 }
