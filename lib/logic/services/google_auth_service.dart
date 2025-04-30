@@ -33,7 +33,7 @@ class GoogleAuthService {
 
       if (user != null) {
         final DatabaseReference dbRef = FirebaseDatabase.instance.ref('userDetails/${user.uid}');
-        await dbRef.set({
+        await dbRef.update({
           "name": user.displayName ?? "Unknown",
           "email": user.email,
           "verify": user.emailVerified,
