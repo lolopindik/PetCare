@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:pet_care/presentation/pages/pet_form_page.dart';
+import 'package:pet_care/logic/riverpod/pet_form.dart';
+import 'package:pet_care/presentation/pages/form_pages/initial_page.dart';
+import 'package:pet_care/presentation/widgets/pet_form_apppbar.dart';
 
 @RoutePage()
 class PetFormScreen extends ConsumerWidget {
@@ -9,31 +11,20 @@ class PetFormScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    final currentStep = ref.read(stepProvider).step;
+    final maxSteps = ref.read(stepProvider).maxSteps;
+
+    final List<Widget> pages = [
+      InitialPage().build(context, ref),
+    ];
+
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: MediaQuery.of(context).size.height * 0.08,
-        centerTitle: true,
-        title: Column(children: <Widget>[
-          Text('Add pet profile', style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: const Color.fromARGB(255, 85, 85, 85),
-            fontSize: 22
-          ),),
-          Text('data from riverpod', style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: Colors.grey
-          ),)
-        ],
+      appBar: PetFormApppbar().build(context, currentStep, maxSteps),
+      body: IndexedStack(
+        index: currentStep,
+        children: pages, 
       ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 15),
-          child: Text('Step 1/4', style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontSize: 14,
-              color: const Color.fromARGB(255, 85, 85, 85),
-            ),),
-        )
-      ],
-      ),
-      body: PetFormPage().build(context, ref),
     );
   }
 }
