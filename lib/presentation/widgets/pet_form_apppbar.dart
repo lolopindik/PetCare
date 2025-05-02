@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:linear_progress_bar/linear_progress_bar.dart';
+import 'package:linear_progress_bar/titled_progress_bar.dart';
+import 'package:pet_care/logic/riverpod/pet_form.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 
 class PetFormApppbar {
-  PreferredSizeWidget? build(BuildContext context, currentStep, maxSteps){
+  PreferredSizeWidget? build(BuildContext context, currentStep, maxSteps, ref){
+
+    final stepDecrement = ref.read(stepProvider).decrementStep;
+
+    Map<int, String> label = {
+      1: 'Add pet profile',
+      2: 'Find breed of pet ',
+      3: '333',
+      4: '444'
+    };
+    
     return AppBar(
+        leading: (currentStep > 1) ? IconButton(onPressed: ()=> stepDecrement(), icon: Icon(Icons.arrow_back_ios_new)) : null,
         backgroundColor: const Color.fromARGB(255, 217, 217, 217),
         toolbarHeight: MediaQuery.of(context).size.height * 0.1,
         centerTitle: true,
@@ -13,7 +25,7 @@ class PetFormApppbar {
             fontWeight: FontWeight.bold,
             fontSize: 22
           ),),
-          Text('data from riverpod', style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          Text('${label[currentStep]}', style: Theme.of(context).textTheme.bodyLarge?.copyWith(
             color: const Color.fromARGB(255, 112, 112, 112),
             fontWeight: FontWeight.bold,
           ),)
@@ -33,9 +45,8 @@ class PetFormApppbar {
           preferredSize: const Size.fromHeight(10),
           child: Container(
             margin: EdgeInsets.only(bottom: 20, left: 20, right: 15),
-            child: LinearProgressBar(
+            child: TitledProgressBar(
               maxSteps: maxSteps,
-              progressType: LinearProgressBar.progressTypeLinear,
               currentStep: currentStep,
               progressColor: LightModeColors.secondaryColor,
               backgroundColor: LightModeColors.primaryColor,

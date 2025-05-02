@@ -12,17 +12,18 @@ class PetFormScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final currentStep = ref.read(stepProvider).step;
-    final maxSteps = ref.read(stepProvider).maxSteps;
+    final currentStep = ref.watch(stepProvider).step;
+    final maxSteps = ref.watch(stepProvider).maxSteps;
 
     final List<Widget> pages = [
       InitialPage().build(context, ref),
     ];
 
     return Scaffold(
-      appBar: PetFormApppbar().build(context, currentStep, maxSteps),
+      appBar: PetFormApppbar().build(context, currentStep, maxSteps, ref),
       body: IndexedStack(
-        index: currentStep,
+        // minus 1, because the count starts from 0
+        index: currentStep - 1,
         children: pages, 
       ),
     );
