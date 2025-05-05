@@ -8,7 +8,7 @@ import 'package:pet_care/logic/riverpod/textfield_handler.dart';
 import 'package:pet_care/logic/services/firebase/authentication_service.dart';
 import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
-import 'package:pet_care/presentation/widgets/auth_textfield.dart';
+import 'package:pet_care/presentation/widgets/custom_textfield.dart';
 
 class RecoveryPage {
   Widget build(BuildContext context, WidgetRef ref) {
@@ -71,7 +71,7 @@ class RecoveryPage {
                               ),
                               child: Column(
                                 children: [
-                                  AuthTextfieldWidget().build(
+                                  CustomTextfieldWidget().build(
                                     context,
                                     'Email',
                                     ref,

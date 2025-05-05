@@ -13,7 +13,7 @@ import 'package:pet_care/logic/services/google_auth_service.dart';
 import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 import 'package:pet_care/presentation/widgets/auth_google.dart';
-import 'package:pet_care/presentation/widgets/auth_textfield.dart';
+import 'package:pet_care/presentation/widgets/custom_textfield.dart';
 
 class SignUpPage {
   Widget build(BuildContext context, WidgetRef ref) {
@@ -87,7 +87,7 @@ class SignUpPage {
                               ),
                               child: Column(
                                 children: [
-                                  AuthTextfieldWidget().build(
+                                  CustomTextfieldWidget().build(
                                     context,
                                     'Username',
                                     ref,
@@ -95,7 +95,7 @@ class SignUpPage {
                                     false,
                                   ),
                                   const Gap(16),
-                                  AuthTextfieldWidget().build(
+                                  CustomTextfieldWidget().build(
                                     context,
                                     'Email',
                                     ref,
@@ -103,7 +103,7 @@ class SignUpPage {
                                     false,
                                   ),
                                   const Gap(16),
-                                  AuthTextfieldWidget().build(
+                                  CustomTextfieldWidget().build(
                                     context,
                                     'Password',
                                     ref,
@@ -111,7 +111,7 @@ class SignUpPage {
                                     true,
                                   ),
                                   const Gap(16),
-                                  AuthTextfieldWidget().build(
+                                  CustomTextfieldWidget().build(
                                     context,
                                     'Confirm Password',
                                     ref,

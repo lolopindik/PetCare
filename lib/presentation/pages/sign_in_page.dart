@@ -12,7 +12,7 @@ import 'package:pet_care/logic/services/google_auth_service.dart';
 import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 import 'package:pet_care/presentation/widgets/auth_google.dart';
-import 'package:pet_care/presentation/widgets/auth_textfield.dart';
+import 'package:pet_care/presentation/widgets/custom_textfield.dart';
 
 class SignInPage {
   Widget build(BuildContext context, WidgetRef ref) {
@@ -77,7 +77,7 @@ class SignInPage {
                               ),
                               child: Column(
                                 children: [
-                                  AuthTextfieldWidget().build(
+                                  CustomTextfieldWidget().build(
                                     context,
                                     'Email',
                                     ref,
@@ -85,7 +85,7 @@ class SignInPage {
                                     false,
                                   ),
                                   const Gap(16),
-                                  AuthTextfieldWidget().build(
+                                  CustomTextfieldWidget().build(
                                     context,
                                     'Password',
                                     ref,

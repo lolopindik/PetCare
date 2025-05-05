@@ -9,7 +9,7 @@ final stepProvider = ChangeNotifierProvider<StepNotifier>((ref){
 
 class StepNotifier extends ChangeNotifier{
   int step = 1;
-  int maxSteps = 4;
+  int maxSteps = 3;
 
   void incrementStep(){
     step++;

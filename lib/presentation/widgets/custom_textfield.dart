@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_care/logic/riverpod/obscure_text.dart';
 import 'package:pet_care/logic/riverpod/textfield_handler.dart';
 
-class AuthTextfieldWidget {
+class CustomTextfieldWidget {
   Widget build(
     BuildContext context,
     String title,
