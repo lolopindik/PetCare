@@ -12,6 +12,11 @@ class InitialPage {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
+    final List<Map<String, String>> petType = [
+      {'image': 'lib/logic/src/assets/icons/icon-dog.png', 'label': 'Dog'},
+      {'image': 'lib/logic/src/assets/icons/icon-cat.png', 'label': 'Cat'}
+    ];
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: SafeArea(
@@ -22,7 +27,7 @@ class InitialPage {
             children: <Widget>[
               Container(
                 width: screenWidth,
-                height: screenHeight * 0.08,
+                height: screenHeight * 0.09,
                 constraints: const BoxConstraints(maxWidth: 600),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
@@ -49,7 +54,8 @@ class InitialPage {
               Container(
                 width: screenWidth,
                 height: screenHeight * 0.5,
-                constraints: const BoxConstraints(maxWidth: 600),
+                constraints:
+                    const BoxConstraints(maxWidth: 600, minHeight: 500),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(20),
@@ -60,10 +66,11 @@ class InitialPage {
                     color: Theme.of(context).primaryColor,
                   ),
                 ),
-                padding: const EdgeInsets.all(16), // Внутренний отступ
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const Gap(12),
                     CustomTextfieldWidget().build(
                       context,
                       'Pet name',
@@ -102,19 +109,38 @@ class InitialPage {
                       ),
                     ),
                     Gap(20),
-                    SizedBox(
-                      height: 100,
+                    Expanded(
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: 2,
+                        itemCount: petType.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            margin: EdgeInsets.only(right: 15),
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: Colors.amber,
-                              borderRadius: BorderRadius.circular(80),
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  borderRadius: BorderRadius.circular(60),
+                                  onTap: (){},
+                                  child: Container(
+                                    height: 100,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 3,
+                                      ),
+                                      borderRadius: BorderRadius.circular(60),
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            '${petType[index]['image']}'),
+                                        fit: BoxFit.scaleDown,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Gap(5),
+                                Text('${petType[index]['label']}')
+                              ],
                             ),
                           );
                         },

@@ -75,6 +75,8 @@ flutter:
     - lib/logic/src/assets/icons/icon_title_3.png
     - lib/logic/src/assets/icons/icon_form.png
     - lib/logic/src/assets/icons/icon_google.png
+    - lib/logic/src/assets/icons/icon-cat.png
+    - lib/logic/src/assets/icons/icon-dog.png
     # Fonts
     - lib/logic/src/fonts/Poppins/Poppins-Regular.ttf
     - lib/logic/src/fonts/Poppins/Poppins-Bold.ttf
