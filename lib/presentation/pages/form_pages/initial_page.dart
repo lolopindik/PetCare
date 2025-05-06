@@ -8,9 +8,9 @@ import 'package:pet_care/presentation/widgets/custom_textfield.dart';
 class InitialPage {
   Widget build(BuildContext context, WidgetRef ref) {
     final stepIncrement = ref.read(stepProvider).incrementStep;
+    final typeTogle = ref.watch(typeProvder);
 
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     final List<Map<String, String>> petType = [
       {'image': 'lib/logic/src/assets/icons/icon-dog.png', 'label': 'Dog'},
@@ -23,82 +23,120 @@ class InitialPage {
         bottom: true,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: screenWidth,
-                height: screenHeight * 0.09,
-                constraints: const BoxConstraints(maxWidth: 600),
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                  border: Border.all(
-                    width: 5,
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: screenWidth,
+                  height: MediaQuery.of(context).size.height * 0.09,
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    border: Border.all(
+                      width: 5,
+                      color: Theme.of(context).primaryColor,
+                    ),
                     color: Theme.of(context).primaryColor,
                   ),
-                  color: Theme.of(context).primaryColor,
-                ),
-                child: Center(
-                  child: Text(
-                    "Enter Your Pet's Information",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                  child: Center(
+                    child: Text(
+                      "Enter Your Pet's Information",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                width: screenWidth,
-                height: screenHeight * 0.5,
-                constraints:
-                    const BoxConstraints(maxWidth: 600, minHeight: 500),
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
+                Container(
+                  width: screenWidth,
+                  constraints: const BoxConstraints(maxWidth: 600),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    ),
+                    border: Border.all(
+                      width: 10,
+                      color: Theme.of(context).primaryColor,
+                    ),
                   ),
-                  border: Border.all(
-                    width: 10,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Gap(12),
-                    CustomTextfieldWidget().build(
-                      context,
-                      'Pet name',
-                      ref,
-                      'petName',
-                      false,
-                    ),
-                    const Gap(12),
-                    CustomTextfieldWidget().build(
-                      context,
-                      'Pet age',
-                      ref,
-                      'petAge',
-                      false,
-                    ),
-                    const Gap(12),
-                    CustomTextfieldWidget().build(
-                      context,
-                      'Pet weight',
-                      ref,
-                      'petWeight',
-                      false,
-                    ),
-                    const Gap(72),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 16.0),
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomTextfieldWidget().build(
+                        context,
+                        'Pet name',
+                        ref,
+                        'petName',
+                        false,
+                      ),
+                      const Gap(12),
+                      CustomTextfieldWidget().build(
+                        context,
+                        'Pet age',
+                        ref,
+                        'petAge',
+                        false,
+                      ),
+                      const Gap(12),
+                      CustomTextfieldWidget().build(
+                        context,
+                        'Pet weight',
+                        ref,
+                        'petWeight',
+                        false,
+                      ),
+                      const Gap(20),
+                      Row(
+                        children: <Widget>[
+                          ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: LightModeColors.primaryColor,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 30,
+                                vertical: 10,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: const Text(
+                              'Male',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                          const Gap(10),
+                          ElevatedButton(
+                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: LightModeColors.primaryColor,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 30,
+                                vertical: 10,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: const Text(
+                              'Female',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Gap(20),
+                      Align(
+                        alignment: Alignment.centerLeft,
                         child: Text(
                           'Type of your pet:',
                           style:
@@ -107,70 +145,77 @@ class InitialPage {
                                   ),
                         ),
                       ),
-                    ),
-                    Gap(20),
-                    Expanded(
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: petType.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 12),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                InkWell(
-                                  borderRadius: BorderRadius.circular(60),
-                                  onTap: (){},
-                                  child: Container(
-                                    height: 100,
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 3,
-                                      ),
-                                      borderRadius: BorderRadius.circular(60),
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            '${petType[index]['image']}'),
-                                        fit: BoxFit.scaleDown,
+                      const Gap(20),
+                      SizedBox(
+                        height: 150,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: petType.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    borderRadius: BorderRadius.circular(60),
+                                    onTap: () {
+                                      typeTogle.togleType(index);
+                                    },
+                                    child: Container(
+                                      height: (typeTogle.index == index)
+                                          ? 110
+                                          : 100,
+                                      width: (typeTogle.index == index)
+                                          ? 110
+                                          : 100,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 3,
+                                        ),
+                                        borderRadius: BorderRadius.circular(60),
+                                        image: DecorationImage(
+                                          image: AssetImage(
+                                              '${petType[index]['image']}'),
+                                          fit: BoxFit.scaleDown,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Gap(5),
-                                Text('${petType[index]['label']}')
-                              ],
-                            ),
-                          );
-                        },
+                                  const Gap(5),
+                                  Text('${petType[index]['label']}')
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ),
+                    ],
+                  ),
+                ),
+                const Gap(80),
+                ElevatedButton(
+                  onPressed: () {
+                    stepIncrement();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: LightModeColors.gradientTeal,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 15,
                     ),
-                  ],
-                ),
-              ),
-              Gap(100),
-              ElevatedButton(
-                onPressed: () {
-                  stepIncrement();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: LightModeColors.gradientTeal,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 15,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                  child: const Text(
+                    'Continue',
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
-                child: const Text(
-                  'Continue',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

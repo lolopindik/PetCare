@@ -7,6 +7,10 @@ final stepProvider = ChangeNotifierProvider<StepNotifier>((ref){
   return StepNotifier();
 });
 
+final typeProvder = ChangeNotifierProvider<TypeNotifier>((ref){
+  return TypeNotifier();
+});
+
 class StepNotifier extends ChangeNotifier{
   int step = 1;
   int maxSteps = 3;
@@ -20,6 +24,15 @@ class StepNotifier extends ChangeNotifier{
   void decrementStep(){
     step--;
     DebugLogger.print('Current step: $step');
+    notifyListeners();
+  }
+}
+
+class TypeNotifier extends ChangeNotifier{
+  int index = -1;
+
+  void togleType(int newIndex){
+    index = newIndex;
     notifyListeners();
   }
 }
