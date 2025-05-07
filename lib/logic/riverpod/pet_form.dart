@@ -11,6 +11,20 @@ final typeProvder = ChangeNotifierProvider<TypeNotifier>((ref){
   return TypeNotifier();
 });
 
+final genderProvider = ChangeNotifierProvider<GenderNotifier>((ref){
+  return GenderNotifier();
+});
+
+class GenderNotifier extends ChangeNotifier{
+  int gender = -1;
+
+  void genderTogle(int newIndex){
+    gender = newIndex;
+    notifyListeners();
+  }
+}
+
+
 class StepNotifier extends ChangeNotifier{
   int step = 1;
   int maxSteps = 3;

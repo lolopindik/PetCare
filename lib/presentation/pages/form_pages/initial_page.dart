@@ -8,7 +8,8 @@ import 'package:pet_care/presentation/widgets/custom_textfield.dart';
 class InitialPage {
   Widget build(BuildContext context, WidgetRef ref) {
     final stepIncrement = ref.read(stepProvider).incrementStep;
-    final typeTogle = ref.watch(typeProvder);
+    final type = ref.watch(typeProvder);
+    final gender = ref.watch(genderProvider);
 
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -16,6 +17,8 @@ class InitialPage {
       {'image': 'lib/logic/src/assets/icons/icon-dog.png', 'label': 'Dog'},
       {'image': 'lib/logic/src/assets/icons/icon-cat.png', 'label': 'Cat'}
     ];
+
+    final List<String> petGender = ['Male', 'Female'];
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -94,44 +97,37 @@ class InitialPage {
                       ),
                       const Gap(20),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: LightModeColors.primaryColor,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 30,
-                                vertical: 10,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            child: const Text(
-                              'Male',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
-                          const Gap(10),
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: LightModeColors.primaryColor,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 30,
-                                vertical: 10,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                          for (int index = 0;
+                              index < petGender.length;
+                              index++) ...[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  gender.genderTogle(index);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: (gender.gender == index)
+                                      ? LightModeColors.primaryColor
+                                      : LightModeColors.gradientGrey,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 30,
+                                    vertical: 10,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: Text(
+                                  petGender[index],
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ),
                             ),
-                            child: const Text(
-                              'Female',
-                              style: TextStyle(fontSize: 16),
-                            ),
-                          ),
+                          ]
                         ],
                       ),
                       const Gap(20),
@@ -146,48 +142,63 @@ class InitialPage {
                         ),
                       ),
                       const Gap(20),
-                      SizedBox(
-                        height: 150,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: petType.length,
-                          itemBuilder: (BuildContext context, int index) {
+                      Align(
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: petType.map((pet) {
+                            final index = petType.indexOf(pet);
                             return Padding(
-                              padding: const EdgeInsets.only(right: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   InkWell(
                                     borderRadius: BorderRadius.circular(60),
                                     onTap: () {
-                                      typeTogle.togleType(index);
+                                      type.togleType(index);
                                     },
                                     child: Container(
-                                      height: (typeTogle.index == index)
-                                          ? 110
-                                          : 100,
-                                      width: (typeTogle.index == index)
-                                          ? 110
-                                          : 100,
+                                      height: (type.index == index) ? 110 : 100,
+                                      width: (type.index == index) ? 110 : 100,
                                       decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: (type.index == index)
+                                                ? LightModeColors.primaryColor
+                                                : Colors.transparent,
+                                            spreadRadius: 5,
+                                            blurRadius: 7,
+                                            offset: Offset(
+                                                0, 0), // Adjust as needed
+                                          ),
+                                        ],
+                                        color: Colors.white,
                                         border: Border.all(
                                           width: 3,
                                         ),
                                         borderRadius: BorderRadius.circular(60),
                                         image: DecorationImage(
-                                          image: AssetImage(
-                                              '${petType[index]['image']}'),
+                                          image: AssetImage(pet['image']!),
                                           fit: BoxFit.scaleDown,
                                         ),
                                       ),
                                     ),
                                   ),
                                   const Gap(5),
-                                  Text('${petType[index]['label']}')
+                                  Text(
+                                    pet['label']!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(
+                                          fontSize: 16,
+                                        ),
+                                  ),
                                 ],
                               ),
                             );
-                          },
+                          }).toList(),
                         ),
                       ),
                     ],
