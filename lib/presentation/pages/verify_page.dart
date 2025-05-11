@@ -1,27 +1,26 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
 
 import 'dart:async';
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:pet_care/logic/riverpod/delete_data.dart';
 import 'package:pet_care/logic/riverpod/email.dart';
 import 'package:pet_care/logic/riverpod/verification.dart';
+import 'package:pet_care/logic/services/firebase/user_service.dart';
 import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/presentation/routes/router.gr.dart';
 
 class VerifyPage {
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = FirebaseAuth.instance.currentUser;
-    final userId = user?.uid;
+    final user = UserService.getUser();
+    // final userId = await UserService.getUserUuid();
     final email = ref.watch(emailProvider).email ?? "Loading...";
     final verifiedNotifier = ref.read(verifiedProvider.notifier);
 
     Timer? verificationTimer;
 
-    // Check user state and redirect if necessary
     void checkInitialState() async {
       if (user == null) {
         verificationTimer?.cancel();
@@ -130,6 +129,9 @@ class VerifyPage {
                 const Gap(16),
                 TextButton(
                   onPressed: () async {
+
+                    final userId = await UserService.getUserUuid();
+
                     if (userId != null) {
                       await ref
                           .read(userDeletionProvider.notifier)

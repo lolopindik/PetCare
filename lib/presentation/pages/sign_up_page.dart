@@ -1,14 +1,15 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously,
 
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:pet_care/logic/funcs/debug_logger.dart';
 import 'package:pet_care/logic/riverpod/textfield_handler.dart';
+import 'package:pet_care/logic/services/database_service.dart';
 import 'package:pet_care/logic/services/firebase/authentication_service.dart';
+import 'package:pet_care/logic/services/firebase/user_service.dart';
 import 'package:pet_care/logic/services/google_auth_service.dart';
 import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
@@ -17,7 +18,6 @@ import 'package:pet_care/presentation/widgets/custom_textfield.dart';
 
 class SignUpPage {
   Widget build(BuildContext context, WidgetRef ref) {
-
     final controllerUserName =
         ref.watch(textFieldControllerProvider('signUpUsername'));
     final controllerEmail =
@@ -139,12 +139,14 @@ class SignUpPage {
                                         );
 
                                         final user =
-                                            FirebaseAuth.instance.currentUser;
+                                            await UserService.getUser();
+                                        final uuid =
+                                            await UserService.getUserUuid();
 
                                         if (user != null) {
                                           DatabaseReference dbRef =
-                                              FirebaseDatabase.instance.ref(
-                                                  'userDetails/${user.uid}');
+                                              await DataBaseRef().databaseRef(
+                                                  'userDetails/$uuid');
 
                                           await dbRef.set({
                                             "name": controllerUserName.text,
@@ -193,21 +195,17 @@ class SignUpPage {
                     ),
                   ),
                   const Gap(30),
-                  AuthGoogleWidget().build(
-                    context,
-                    () async {
-                      final user = await GoogleAuthService().signInWithGoogle();
-                      if (user != null) {
-                        SnackbarServices.showSuccessSnackbar(
-                            context, 'Signed up with Google');
-                        context.router.replacePath('/home');
-                      } else {
-                        SnackbarServices.showErrorSnackbar(
-                            context, 'Google Sign-Up failed');
-                      }
-                    },
-                    'Sign up with Google'
-                  ),
+                  AuthGoogleWidget().build(context, () async {
+                    final user = await GoogleAuthService().signInWithGoogle();
+                    if (user != null) {
+                      SnackbarServices.showSuccessSnackbar(
+                          context, 'Signed up with Google');
+                      context.router.replacePath('/home');
+                    } else {
+                      SnackbarServices.showErrorSnackbar(
+                          context, 'Google Sign-Up failed');
+                    }
+                  }, 'Sign up with Google'),
                 ],
               ),
             ),

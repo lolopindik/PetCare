@@ -1,13 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:pet_care/logic/funcs/debug_logger.dart';
 import 'package:pet_care/logic/riverpod/textfield_handler.dart';
 import 'package:pet_care/logic/services/firebase/authentication_service.dart';
+import 'package:pet_care/logic/services/firebase/user_service.dart';
 import 'package:pet_care/logic/services/google_auth_service.dart';
 import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
@@ -101,7 +101,7 @@ class SignInPage {
                                           password: controllerPassword.text.trim(),
                                         );
 
-                                        final user = FirebaseAuth.instance.currentUser;
+                                        final user = await UserService.getUser();
 
                                         if (user != null) {
                                           SnackbarServices.showSuccessSnackbar(

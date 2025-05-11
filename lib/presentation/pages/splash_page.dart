@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_care/logic/riverpod/connectivity.dart';
 import 'package:pet_care/logic/riverpod/intro.dart';
 import 'package:pet_care/logic/riverpod/verification.dart';
+import 'package:pet_care/logic/services/firebase/user_service.dart';
 import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/presentation/routes/router.gr.dart';
 
@@ -17,7 +18,7 @@ class SplashPage {
       final connectivity = ref.watch(connectivityProvider);
       final hasInternet = connectivity != ConnectivityResult.none;
       final verifiedNotifier = ref.read(verifiedProvider.notifier);
-      final user = FirebaseAuth.instance.currentUser;
+      final user = await UserService.getUser();
 
       if (!hasInternet) {
         // SnackbarServices.showErrorSnackbar(context, 'No internet connection');
@@ -25,7 +26,6 @@ class SplashPage {
       }
 
       if (user != null && hasInternet) {
-        await user.reload();
         final updatedUser = FirebaseAuth.instance.currentUser;
         final isEmailVerified = updatedUser?.emailVerified ?? false;
         await verifiedNotifier.setVerified(isEmailVerified);
