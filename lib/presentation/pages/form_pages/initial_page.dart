@@ -101,7 +101,7 @@ class InitialPage {
                       const Gap(12),
                       CustomTextfieldWidget().build(
                         context,
-                        'Pet weight',
+                        'Pet weight in kg',
                         ref,
                         'petWeight',
                         false,
