@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:pet_care/data/model/pet_form_model.dart';
+import 'package:pet_care/logic/funcs/debug_logger.dart';
 import 'package:pet_care/logic/riverpod/pet_form.dart';
+import 'package:pet_care/logic/riverpod/textfield_handler.dart';
+import 'package:pet_care/logic/services/firebase/form_service.dart';
+import 'package:pet_care/logic/services/snackbar_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 import 'package:pet_care/presentation/widgets/custom_textfield.dart';
 
@@ -10,6 +15,11 @@ class InitialPage {
     final stepIncrement = ref.read(stepProvider).incrementStep;
     final type = ref.watch(typeProvder);
     final gender = ref.watch(genderProvider);
+
+    final controllerName = ref.watch(textFieldControllerProvider('petName'));
+    final controllerAge = ref.watch(textFieldControllerProvider('petAge'));
+    final controllerWeight =
+        ref.watch(textFieldControllerProvider('petWeight'));
 
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -86,6 +96,7 @@ class InitialPage {
                         ref,
                         'petAge',
                         false,
+                        isNumeric: true,
                       ),
                       const Gap(12),
                       CustomTextfieldWidget().build(
@@ -94,6 +105,7 @@ class InitialPage {
                         ref,
                         'petWeight',
                         false,
+                        isNumeric: true,
                       ),
                       const Gap(20),
                       Row(
@@ -111,8 +123,10 @@ class InitialPage {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: (gender.gender == index)
                                       ? LightModeColors.primaryColor
-                                      : LightModeColors.gradientGrey,
-                                  foregroundColor: Colors.white,
+                                      : Color(0xFFE0E0E0),
+                                  foregroundColor: (gender.gender == index)
+                                      ? Colors.white
+                                      : Colors.grey,
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 30,
                                     vertical: 10,
@@ -206,9 +220,34 @@ class InitialPage {
                 ),
                 const Gap(80),
                 ElevatedButton(
-                  onPressed: () {
-                    stepIncrement();
-                  },
+                  onPressed: (gender.gender > -1 &&
+                          type.index > -1 &&
+                          controllerName.text.trim().isNotEmpty &&
+                          controllerWeight.text.trim().isNotEmpty)
+                      ? () async {
+                          try {
+                            FirstPageModel pet = FirstPageModel.initialize(
+                                petAge:
+                                    int.tryParse(controllerAge.text.trim()) ??
+                                        0,
+                                petGender: gender.gender,
+                                petName: controllerName.text.trim(),
+                                petType: type.index,
+                                petWeight: double.tryParse(
+                                        controllerWeight.text.trim()) ??
+                                    0.0);
+                            SnackbarServices.showSuccessSnackbar(
+                                context, 'Data saved');
+                            final data = pet.toMap();
+                            DebugLogger.print(data.toString());
+                            SaveFirstPage().saveForm(data);
+                            stepIncrement();
+                          } catch (e) {
+                            DebugLogger.print('$e');
+                            rethrow;
+                          }
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: LightModeColors.gradientTeal,
                     foregroundColor: Colors.white,

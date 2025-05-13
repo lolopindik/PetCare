@@ -27,13 +27,14 @@ class SaveFirstPage implements FormService {
 
       await dbRef.update({
         "Pets": {
-          "BaseInfo": {
-            "id": data['id'],
-            "name": data['petName'],
-            "age": data['petAge'],
-            "weight": data['petWeight'],
-            "gender": data['petGender'],
-            "type": data['petType']
+          data['id']: {
+            "BaseInfo": {
+              "name": data['petName'],
+              "age": data['petAge'],
+              "weight": data['petWeight'],
+              "gender": data['petGender'],
+              "type": data['petType']
+            }
           }
         }
       });
