@@ -46,3 +46,4 @@ app.*.map.json
 
 # API's config
 *.env
+*firebase.json

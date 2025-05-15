@@ -261,7 +261,7 @@ class InitialPage {
                   ),
                   child: const Text(
                     'Continue',
-                    style: TextStyle(fontSize: 16),
+                    // style: TextStyle(fontSize: 16),
                   ),
                 ),
               ],

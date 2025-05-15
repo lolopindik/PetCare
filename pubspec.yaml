@@ -33,6 +33,7 @@ dependencies:
   # Authentication with Google
   google_sign_in: ^6.3.0
   google_sign_in_web: ^0.12.4+4
+  dio: ^5.8.0+1
 
   #! Used for contain all api's keys
   flutter_dotenv: ^5.2.1
