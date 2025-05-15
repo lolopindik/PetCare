@@ -74,3 +74,19 @@ final apiProvider = Provider<PetApi>((ref) {
   final petTypeIndex = ref.watch(typeProvder).index;
   return petTypeIndex == 0 ? Dog() : Cat();
 });
+
+final searchQueryProvider = StateProvider<String>((ref) => '');
+
+final filteredBreedsProvider = Provider<List<Map<String, dynamic>>>((ref) {
+  final breeds = ref.watch(breedsProvider).breeds;
+  final searchQuery = ref.watch(searchQueryProvider).trim().toLowerCase();
+
+  if (searchQuery.isEmpty) {
+    return breeds;
+  }
+
+  return breeds.where((breed) {
+    final name = breed['name']?.toString().toLowerCase() ?? '';
+    return name.contains(searchQuery);
+  }).toList();
+});

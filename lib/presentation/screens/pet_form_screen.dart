@@ -25,7 +25,6 @@ class PetFormScreen extends ConsumerWidget {
       resizeToAvoidBottomInset: true,
       appBar: PetFormApppbar().build(context, currentStep, maxSteps, ref),
       body: IndexedStack(
-        // minus 1, because the count starts from 0
         index: currentStep - 1,
         children: pages, 
       ),
