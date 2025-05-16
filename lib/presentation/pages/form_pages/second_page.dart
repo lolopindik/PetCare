@@ -60,11 +60,11 @@ class SecondPage {
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(16),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black,
                     blurRadius: 8,
-                    offset: const Offset(0, 4),
+                    offset: Offset(0, 4),
                   ),
                 ],
               ),
@@ -114,228 +114,82 @@ class SecondPage {
             ),
             const Gap(16),
             Expanded(
-              child: Skeletonizer(
-                enabled: breedsState.isLoading && breedsState.breeds.isEmpty,
-                effect: ShimmerEffect(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                ),
-                child: breedsState.error != null
-                    ? Center(
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                'Error: ${breedsState.error}',
-                                style: const TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const Gap(12),
-                              ElevatedButton(
-                                onPressed: () => breedsNotifier.loadNextPage(),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      Theme.of(context).primaryColor,
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                    vertical: 12,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Retry',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                            ],
-                          ),
+              child: breedsState.error != null
+                  ? Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                      )
-                    : filteredBreeds.isEmpty && !breedsState.isLoading
-                        ? Center(
-                            child: Text(
-                              'No breeds found',
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Error: ${breedsState.error}',
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const Gap(12),
+                            ElevatedButton(
+                              onPressed: () => breedsNotifier.loadNextPage(),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                'Retry',
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w600),
                               ),
                             ),
-                          )
-                        : GridView.builder(
-                            controller: scrollController,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 12,
-                              mainAxisSpacing: 12,
-                              childAspectRatio: 0.75,
+                          ],
+                        ),
+                      ),
+                    )
+                  : filteredBreeds.isEmpty && !breedsState.isLoading
+                      ? Center(
+                          child: Text(
+                            'No breeds found',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
                             ),
-                            itemCount: filteredBreeds.length +
-                                (breedsState.isLoading ? 1 : 0),
-                            itemBuilder: (context, index) {
-                              if (index == filteredBreeds.length &&
-                                  breedsState.isLoading) {
-                                return Skeletonizer(
-                                  enabled: true,
-                                  effect: ShimmerEffect(
-                                    baseColor: Colors.grey[300]!,
-                                    highlightColor: Colors.grey[100]!,
-                                  ),
-                                  child: Card(
-                                    elevation: 4,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Center(
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                            child: Container(
-                                              color: Colors.grey[200],
-                                              child: Icon(
-                                                Icons.pets,
-                                                size: 50,
-                                                color: Colors.grey[400],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          bottom: 0,
-                                          left: 0,
-                                          right: 0,
-                                          child: Container(
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                                colors: [
-                                                  LightModeColors.primaryColor,
-                                                  LightModeColors.gradientTeal,
-                                                ],
-                                              ),
-                                            ),
-                                            child: Text(
-                                              'Placeholder Breed',
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }
-
-                              final breed = filteredBreeds[index];
-                              return Card(
-                                elevation: 4,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
-                                      child: breed['image']?['url'] != null
-                                          ? CachedNetworkImage(
-                                              imageUrl: breed['image']['url'],
-                                              fit: BoxFit.cover,
-                                              height: double.infinity,
-                                              width: double.infinity,
-                                              placeholder: (context, url) =>
-                                                  Container(
-                                                color: Colors.grey[200],
-                                                child: const Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                              ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Container(
-                                                        color: Colors.grey[200],
-                                                        child: Center(
-                                                          child: Icon(
-                                                            Icons.pets,
-                                                            size: 50,
-                                                            color: Colors.grey[400],
-                                                          ),
-                                                        ),
-                                                      ),
-                                            )
-                                          : Container(
-                                              color: Colors.grey[200],
-                                              child: Center(
-                                                child: Icon(
-                                                  Icons.pets,
-                                                  size: 50,
-                                                  color: Colors.grey[400],
-                                                ),
-                                              ),
-                                            ),
-                                    ),
-                                    Positioned(
-                                      bottom: 0,
-                                      left: 0,
-                                      right: 0,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: [
-                                              LightModeColors.primaryColor,
-                                              LightModeColors.gradientTeal,
-                                            ],
-                                          ),
-                                        ),
-                                        child: Text(
-                                          breed['name'] ?? 'N/A',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
                           ),
-              ),
+                        )
+                      : GridView.builder(
+                          controller: scrollController,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                            childAspectRatio: 0.75,
+                          ),
+                          itemCount: filteredBreeds.length +
+                              (breedsState.isLoading ? 6 : 0),
+                          itemBuilder: (context, index) {
+                            if (index >= filteredBreeds.length &&
+                                breedsState.isLoading) {
+                              return _buildSkeletonCard();
+                            }
+
+                            final breed = filteredBreeds[index];
+                            return _buildBreedCard(breed);
+                          },
+                        ),
             ),
             if (!breedsState.hasMore &&
                 searchQuery.isEmpty &&
@@ -355,7 +209,7 @@ class SecondPage {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: ElevatedButton(
-                  //todo add logic later
+                  //todo: Add logic later
                   onPressed: null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: LightModeColors.gradientTeal,
@@ -379,6 +233,133 @@ class SecondPage {
                   ),
                 ),
               ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBreedCard(Map<String, dynamic> breed) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: breed['image']?['url'] != null
+                ? CachedNetworkImage(
+                    imageUrl: breed['image']['url'],
+                    fit: BoxFit.cover,
+                    height: double.infinity,
+                    width: double.infinity,
+                    placeholder: (context, url) => Container(
+                      color: Colors.grey[200],
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      color: Colors.grey[200],
+                      child: Center(
+                        child: Icon(
+                          Icons.pets,
+                          size: 50,
+                          color: Colors.grey[400],
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(
+                    color: Colors.grey[200],
+                    child: Center(
+                      child: Icon(
+                        Icons.pets,
+                        size: 50,
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                  ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    LightModeColors.primaryColor,
+                    LightModeColors.gradientTeal,
+                  ],
+                ),
+              ),
+              child: Text(
+                breed['name'] ?? 'N/A',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSkeletonCard() {
+    return Skeletonizer(
+      enabled: true,
+      effect: ShimmerEffect(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+      ),
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                color: Colors.grey[200],
+                height: double.infinity,
+                width: double.infinity,
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                color: Colors.grey[400],
+                height: 40,
+                child: Text(
+                  'Placeholder Breed',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
           ],
         ),
       ),
