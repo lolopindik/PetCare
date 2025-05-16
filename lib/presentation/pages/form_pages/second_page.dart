@@ -57,6 +57,7 @@ class SecondPage {
         child: Column(
           children: <Widget>[
             Container(
+              margin: EdgeInsets.symmetric(horizontal: 12),
               width: screenWidth,
               height: screenHeight * 0.06,
               decoration: BoxDecoration(
