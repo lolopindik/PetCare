@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -17,7 +18,8 @@ class SecondPage {
     final searchQuery = ref.watch(searchQueryProvider);
 
     final ScrollController scrollController = ScrollController();
-    final TextEditingController searchController = TextEditingController.fromValue(
+    final TextEditingController searchController =
+        TextEditingController.fromValue(
       TextEditingValue(
         text: searchQuery,
         selection: TextSelection.collapsed(offset: searchQuery.length),
@@ -72,10 +74,12 @@ class SecondPage {
                   style: const TextStyle(color: Colors.white, fontSize: 16),
                   cursorColor: Colors.white,
                   decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search, color: Colors.white70, size: 24),
+                    prefixIcon: const Icon(Icons.search,
+                        color: Colors.white70, size: 24),
                     suffixIcon: searchController.text.isNotEmpty
                         ? IconButton(
-                            icon: const Icon(Icons.clear, color: Colors.white70, size: 20),
+                            icon: const Icon(Icons.clear,
+                                color: Colors.white70, size: 20),
                             onPressed: () {
                               searchController.clear();
                               ref.read(searchQueryProvider.notifier).state = '';
@@ -83,19 +87,22 @@ class SecondPage {
                           )
                         : null,
                     hintText: 'Search for breeds...',
-                    hintStyle: const TextStyle(color: Colors.white54, fontSize: 16),
+                    hintStyle:
+                        const TextStyle(color: Colors.white54, fontSize: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none,
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 14),
                     filled: true,
                     fillColor: Colors.transparent,
                   ),
                   textInputAction: TextInputAction.search,
                   onChanged: (value) {
                     debounceTimer?.cancel();
-                    debounceTimer = Timer(const Duration(milliseconds: 300), () {
+                    debounceTimer =
+                        Timer(const Duration(milliseconds: 300), () {
                       ref.read(searchQueryProvider.notifier).state = value;
                     });
                   },
@@ -137,7 +144,8 @@ class SecondPage {
                               ElevatedButton(
                                 onPressed: () => breedsNotifier.loadNextPage(),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).primaryColor,
+                                  backgroundColor:
+                                      Theme.of(context).primaryColor,
                                   foregroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 24,
@@ -149,7 +157,9 @@ class SecondPage {
                                 ),
                                 child: const Text(
                                   'Retry',
-                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600),
                                 ),
                               ),
                             ],
@@ -176,8 +186,8 @@ class SecondPage {
                               mainAxisSpacing: 12,
                               childAspectRatio: 0.75,
                             ),
-                            itemCount:
-                                filteredBreeds.length + (breedsState.isLoading ? 1 : 0),
+                            itemCount: filteredBreeds.length +
+                                (breedsState.isLoading ? 1 : 0),
                             itemBuilder: (context, index) {
                               if (index == filteredBreeds.length &&
                                   breedsState.isLoading) {
@@ -196,7 +206,8 @@ class SecondPage {
                                       children: [
                                         Center(
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(16),
+                                            borderRadius:
+                                                BorderRadius.circular(16),
                                             child: Container(
                                               color: Colors.grey[200],
                                               child: Icon(
@@ -207,7 +218,6 @@ class SecondPage {
                                             ),
                                           ),
                                         ),
-                                        // Placeholder for breed name
                                         Positioned(
                                           bottom: 0,
                                           left: 0,
@@ -251,34 +261,46 @@ class SecondPage {
                                 ),
                                 child: Stack(
                                   children: [
-                                    // ClipRRect(
-                                    //   borderRadius: BorderRadius.circular(16),
-                                    //   child: breed['image'] != null
-                                    //       ? Image.network(
-                                    //           breed['image'],
-                                    //           fit: BoxFit.cover,
-                                    //           height: double.infinity,
-                                    //           width: double.infinity,
-                                    //           errorBuilder: (context, error, stackTrace) =>
-                                    //               Container(
-                                    //             color: Colors.grey[200],
-                                    //             child: Icon.plus
-                                    //               Icons.pets,
-                                    //               size: 50,
-                                    //               color: Colors.grey[400],
-                                    //             ),
-                                    //         )
-                                    //       : Container(
-                                    //           color: Colors.grey[200],
-                                    //           child: Icon(
-                                    //             Icons.pets,
-                                    //             size: 50,
-                                    //             color: Colors.grey[400],
-                                    //           ),
-                                    //         ),
-                                    // ),
-                                    //todo lated add real images from api
-                                    Center(child: Text('No image yet :(')),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: breed['image']?['url'] != null
+                                          ? CachedNetworkImage(
+                                              imageUrl: breed['image']['url'],
+                                              fit: BoxFit.cover,
+                                              height: double.infinity,
+                                              width: double.infinity,
+                                              placeholder: (context, url) =>
+                                                  Container(
+                                                color: Colors.grey[200],
+                                                child: const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Container(
+                                                        color: Colors.grey[200],
+                                                        child: Center(
+                                                          child: Icon(
+                                                            Icons.pets,
+                                                            size: 50,
+                                                            color: Colors.grey[400],
+                                                          ),
+                                                        ),
+                                                      ),
+                                            )
+                                          : Container(
+                                              color: Colors.grey[200],
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.pets,
+                                                  size: 50,
+                                                  color: Colors.grey[400],
+                                                ),
+                                              ),
+                                            ),
+                                    ),
                                     Positioned(
                                       bottom: 0,
                                       left: 0,

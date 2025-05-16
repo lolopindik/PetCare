@@ -3,7 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pet_care/logic/funcs/debug_logger.dart';
 
 abstract class PetApi {
-  Future<List<Map<String, dynamic>>> getAllBreeds({int limit = 10, int page = 0});
+  Future<List<Map<String, dynamic>>> getAllBreeds(
+      {int limit = 10, int page = 0});
 }
 
 abstract class BasePetApi implements PetApi {
@@ -19,7 +20,8 @@ abstract class BasePetApi implements PetApi {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> getAllBreeds({int limit = 10, int page = 0}) async {
+  Future<List<Map<String, dynamic>>> getAllBreeds(
+      {int limit = 10, int page = 0}) async {
     try {
       final response = await dio.get(
         '$baseUrl/breeds',
@@ -31,15 +33,48 @@ abstract class BasePetApi implements PetApi {
           headers: {'x-api-key': apiKey},
         ),
       );
-      DebugLogger.print('Ответ API: ${response.data}');
+      DebugLogger.print('Ответ API ($baseUrl): ${response.data}');
       if (response.statusCode == 200) {
         final List<dynamic> breeds = response.data;
-        return breeds.cast<Map<String, dynamic>>();
+        final List<Map<String, dynamic>> breedsWithImages = [];
+
+        for (var breed in breeds) {
+          final breedMap = Map<String, dynamic>.from(breed);
+
+          if (breedMap['image'] == null || breedMap['image']['url'] == null) {
+            if (breedMap['reference_image_id'] != null) {
+              try {
+                final imageResponse = await dio.get(
+                  '$baseUrl/images/${breedMap['reference_image_id']}',
+                  options: Options(headers: {'x-api-key': apiKey}),
+                );
+                DebugLogger.print(
+                    'Изображение для ${breedMap['name']}: ${imageResponse.data}');
+                if (imageResponse.statusCode == 200 &&
+                    imageResponse.data['url'] != null) {
+                  breedMap['image'] = {'url': imageResponse.data['url']};
+                } else {
+                  breedMap['image'] = null;
+                }
+              } catch (e) {
+                DebugLogger.print(
+                    'Ошибка при загрузке изображения для ${breedMap['name']}: $e');
+                breedMap['image'] = null;
+              }
+            } else {
+              breedMap['image'] = null;
+            }
+          }
+
+          breedsWithImages.add(breedMap);
+        }
+
+        return breedsWithImages;
       } else {
         throw Exception(errorMessage);
       }
     } catch (e) {
-      DebugLogger.print('Ошибка в getAllBreeds: $e');
+      DebugLogger.print('Ошибка в getAllBreeds ($baseUrl): $e');
       throw Exception('$errorMessage: $e');
     }
   }
