@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:pet_care/logic/riverpod/api_providers.dart';
+import 'package:pet_care/logic/riverpod/pet_breed.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -16,6 +17,7 @@ class SecondPage {
     final breedsNotifier = ref.read(breedsProvider.notifier);
     final filteredBreeds = ref.watch(filteredBreedsProvider);
     final searchQuery = ref.watch(searchQueryProvider);
+    final breedSelected = ref.watch(breedProvider);
 
     final ScrollController scrollController = ScrollController();
     final TextEditingController searchController =
@@ -51,7 +53,7 @@ class SecondPage {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        padding: const EdgeInsets.symmetric(vertical: 32),
         child: Column(
           children: <Widget>[
             Container(
@@ -187,7 +189,7 @@ class SecondPage {
                             }
 
                             final breed = filteredBreeds[index];
-                            return _buildBreedCard(breed);
+                            return _buildBreedCard(breed, index, ref);
                           },
                         ),
             ),
@@ -209,8 +211,10 @@ class SecondPage {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: ElevatedButton(
-                  //todo: Add logic later
-                  onPressed: null,
+                  onPressed: (breedSelected.selectedIndex > -1 &&
+                          breedSelected.selectedName.isNotEmpty)
+                      ? () async {}
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: LightModeColors.gradientTeal,
                     foregroundColor: Colors.white,
@@ -239,29 +243,55 @@ class SecondPage {
     );
   }
 
-  Widget _buildBreedCard(Map<String, dynamic> breed) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Stack(
-        children: [
-          ClipRRect(
+  Widget _buildBreedCard(Map<String, dynamic> breed, int index, WidgetRef ref) {
+    final isSelected = ref.watch(breedProvider).selectedIndex == index;
+
+    return GestureDetector(
+      onTap: () {
+        ref.read(breedProvider.notifier).selectBreed(index, breed['name']);
+      },
+      child: Container(
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            child: breed['image']?['url'] != null
-                ? CachedNetworkImage(
-                    imageUrl: breed['image']['url'],
-                    fit: BoxFit.cover,
-                    height: double.infinity,
-                    width: double.infinity,
-                    placeholder: (context, url) => Container(
-                      color: Colors.grey[200],
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: LightModeColors.primaryColor,
+                      spreadRadius: 5,
+                      blurRadius: 15,
+                      offset: const Offset(0, 1),
                     ),
-                    errorWidget: (context, url, error) => Container(
+                  ]
+                : null),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
+            children: [
+              breed['image']?['url'] != null
+                  ? CachedNetworkImage(
+                      imageUrl: breed['image']['url'],
+                      fit: BoxFit.cover,
+                      height: double.infinity,
+                      width: double.infinity,
+                      placeholder: (context, url) => Container(
+                        color: Colors.grey[200],
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.grey[200],
+                        child: Center(
+                          child: Icon(
+                            Icons.pets,
+                            size: 50,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(
                       color: Colors.grey[200],
                       child: Center(
                         child: Icon(
@@ -271,48 +301,38 @@ class SecondPage {
                         ),
                       ),
                     ),
-                  )
-                : Container(
-                    color: Colors.grey[200],
-                    child: Center(
-                      child: Icon(
-                        Icons.pets,
-                        size: 50,
-                        color: Colors.grey[400],
-                      ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        LightModeColors.primaryColor,
+                        LightModeColors.gradientTeal,
+                      ],
                     ),
                   ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    LightModeColors.primaryColor,
-                    LightModeColors.gradientTeal,
-                  ],
+                  child: Text(
+                    breed['name'] ?? 'N/A',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.black54,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
-              child: Text(
-                breed['name'] ?? 'N/A',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
