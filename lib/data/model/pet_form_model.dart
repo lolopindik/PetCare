@@ -77,3 +77,14 @@ class SecondPageModel implements Pages {
     DebugLogger.print("Pet Breed: $breed");
   }
 }
+
+class ThirdPageModel implements Pages{
+
+  Map<dynamic, dynamic> data;
+  ThirdPageModel(this.data);
+
+   @override
+  void pageData() {
+    DebugLogger.print("Saving third page data: ${data.toString()}");
+  }
+}

@@ -1,7 +1,10 @@
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_care/logic/funcs/debug_logger.dart';
+import 'package:pet_care/logic/services/firebase/pets_service.dart';
+import 'package:pet_care/logic/services/firebase/user_service.dart';
 
 final stepProvider = ChangeNotifierProvider<StepNotifier>((ref){
   return StepNotifier();
@@ -71,3 +74,27 @@ class TypeNotifier extends ChangeNotifier{
     notifyListeners();
   }
 }
+
+final petDataProvider = FutureProvider<Map?>((ref) async {
+  final userId = await UserService.getUserUuid();
+  // ignore: unnecessary_null_comparison
+  if (userId == null) {
+    DebugLogger.print('Error: User ID is null');
+    return null;
+  }
+  final petId = await PetsService().getFirstPetId(userId.toString());
+  if (petId == null) {
+    DebugLogger.print('Error: Pet ID is null');
+    return null;
+  }
+  final dbRef = FirebaseDatabase.instance.ref("userDetails");
+  final snapshot = await dbRef.child("$userId/Pets/$petId/BaseInfo").get();
+  if (!snapshot.exists || snapshot.value == null) {
+    DebugLogger.print('Error: No data found at $userId/Pets/$petId/BaseInfo');
+    return null;
+  }
+  return snapshot.value as Map;
+});
+
+final selectedDiseasesProvider = StateProvider<Set<String>>((ref) => {});
+final noneSelectedProvider = StateProvider<bool>((ref) => false);
