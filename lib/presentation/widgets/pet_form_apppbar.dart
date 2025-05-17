@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:linear_progress_bar/titled_progress_bar.dart';
 import 'package:pet_care/logic/riverpod/pet_form.dart';
+import 'package:pet_care/logic/services/firebase/pets_service.dart';
+import 'package:pet_care/logic/services/firebase/user_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 
 class PetFormApppbar {
@@ -10,14 +12,19 @@ class PetFormApppbar {
     Map<int, String> label = {
       1: 'Tell us about your pet',
       2: 'Find breed of pet ',
-      3: '333',
-      4: '444'
+      3: "Fill out your pet's health information",
     };
 
     return AppBar(
       leading: (currentStep > 1)
           ? IconButton(
-              onPressed: () => stepDecrement(),
+              onPressed: (currentStep == 2)
+                  ? () async {
+                      final userId = await UserService.getUserUuid();
+                      stepDecrement();
+                      PetsService().deleteFirstPetId(userId);
+                    }
+                  : () => stepDecrement(),
               icon: Icon(Icons.arrow_back_ios_new))
           : null,
       backgroundColor: const Color.fromARGB(255, 217, 217, 217),

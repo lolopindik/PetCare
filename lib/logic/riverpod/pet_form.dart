@@ -15,6 +15,26 @@ final genderProvider = ChangeNotifierProvider<GenderNotifier>((ref){
   return GenderNotifier();
 });
 
+final breedProvider = ChangeNotifierProvider((ref) => BreedNotifier());
+
+class BreedNotifier extends ChangeNotifier {
+  int selectedIndex = -1;
+  String selectedBreed = '';
+
+  void selectBreed(int newIndex, String newBreed) {
+    selectedIndex = newIndex;
+    selectedBreed = newBreed;
+    notifyListeners();
+  }
+
+  void clearSelection() {
+    selectedIndex = -1;
+    selectedBreed = '';
+    notifyListeners();
+  }
+}
+
+
 class GenderNotifier extends ChangeNotifier{
   int gender = -1;
 
@@ -23,6 +43,7 @@ class GenderNotifier extends ChangeNotifier{
     notifyListeners();
   }
 }
+
 
 
 class StepNotifier extends ChangeNotifier{

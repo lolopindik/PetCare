@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_care/logic/riverpod/pet_form.dart';
 import 'package:pet_care/presentation/pages/form_pages/initial_page.dart';
 import 'package:pet_care/presentation/pages/form_pages/second_page.dart';
+import 'package:pet_care/presentation/pages/form_pages/third_page.dart';
 import 'package:pet_care/presentation/widgets/pet_form_apppbar.dart';
 
 @RoutePage()
@@ -18,7 +19,8 @@ class PetFormScreen extends ConsumerWidget {
 
     final List<Widget> pages = [
       InitialPage().build(context, ref),
-      SecondPage().build(context, ref)
+      SecondPage().build(context, ref),
+      ThirdPage().build(context, ref)
     ];
 
     return Scaffold(

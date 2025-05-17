@@ -59,3 +59,21 @@ class FirstPageModel implements Pages {
     DebugLogger.print("Pet Weight: $petWeight");
   }
 }
+
+class SecondPageModel implements Pages {
+  final String breed;
+
+  SecondPageModel({required this.breed});
+
+    Map<String, dynamic> toMap() {
+    return {
+      'petBreed': breed
+    };
+  }
+
+  @override
+  void pageData() {
+    DebugLogger.print("Saving first page data:");
+    DebugLogger.print("Pet Breed: $breed");
+  }
+}

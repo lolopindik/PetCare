@@ -3,8 +3,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:pet_care/data/model/pet_form_model.dart';
+import 'package:pet_care/logic/funcs/debug_logger.dart';
 import 'package:pet_care/logic/riverpod/api_providers.dart';
-import 'package:pet_care/logic/riverpod/pet_breed.dart';
+import 'package:pet_care/logic/riverpod/pet_form.dart' show breedProvider, stepProvider;
+import 'package:pet_care/logic/services/firebase/form_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -18,6 +21,8 @@ class SecondPage {
     final filteredBreeds = ref.watch(filteredBreedsProvider);
     final searchQuery = ref.watch(searchQueryProvider);
     final breedSelected = ref.watch(breedProvider);
+
+    final stepIncrement = ref.read(stepProvider).incrementStep;
 
     final ScrollController scrollController = ScrollController();
     final TextEditingController searchController =
@@ -213,8 +218,21 @@ class SecondPage {
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: ElevatedButton(
                   onPressed: (breedSelected.selectedIndex > -1 &&
-                          breedSelected.selectedName.isNotEmpty)
-                      ? () async {}
+                          breedSelected.selectedBreed.isNotEmpty)
+                      ? () async {
+                        try {
+                          final String breed = breedSelected.selectedBreed;
+                          SecondPageModel breedModel = SecondPageModel(breed: breed);
+                          Map<String, dynamic> data = breedModel.toMap();
+
+                          SaveSecondPage().saveForm(data);
+                          stepIncrement();
+
+                        } catch (e) {
+                          DebugLogger.print('$e');
+                          rethrow; 
+                        }
+                      }
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: LightModeColors.gradientTeal,
@@ -250,6 +268,7 @@ class SecondPage {
     return GestureDetector(
       onTap: () {
         ref.read(breedProvider.notifier).selectBreed(index, breed['name']);
+        DebugLogger.print('Selected breed: ${breed['name']}');
       },
       child: Container(
         margin: const EdgeInsets.all(10),

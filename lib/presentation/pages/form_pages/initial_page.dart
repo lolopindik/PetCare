@@ -6,7 +6,8 @@ import 'package:pet_care/logic/funcs/debug_logger.dart';
 import 'package:pet_care/logic/riverpod/pet_form.dart';
 import 'package:pet_care/logic/riverpod/textfield_handler.dart';
 import 'package:pet_care/logic/services/firebase/form_service.dart';
-import 'package:pet_care/logic/services/snackbar_service.dart';
+import 'package:pet_care/logic/services/firebase/pets_service.dart';
+import 'package:pet_care/logic/services/firebase/user_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 import 'package:pet_care/presentation/widgets/custom_textfield.dart';
 
@@ -236,11 +237,18 @@ class InitialPage {
                                 petWeight: double.tryParse(
                                         controllerWeight.text.trim()) ??
                                     0.0);
-                            SnackbarServices.showSuccessSnackbar(
-                                context, 'Data saved');
+
                             final data = pet.toMap();
+
+                            final userId = await UserService.getUserUuid();
+                            final petService = PetsService();
+
                             DebugLogger.print(data.toString());
-                            SaveFirstPage().saveForm(data);
+                            // ignore: unnecessary_null_comparison
+                            if(petService.getFirstPetId(userId) != null) {
+                              await petService.deleteFirstPetId(userId);
+                            }
+                            await SaveFirstPage().saveForm(data);
                             stepIncrement();
                           } catch (e) {
                             DebugLogger.print('$e');
