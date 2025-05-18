@@ -65,85 +65,62 @@ class ThirdPage {
             }
 
             return Scaffold(
-              body: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      // ignore: deprecated_member_use
-                      LightModeColors.primaryColor.withOpacity(0.1),
-                      Colors.white,
-                    ],
+              body: Center(
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: 600
                   ),
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            "Select health issues for your $ageCategory ${isDog ? "Dog" : "Cat"}:",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: LightModeColors.primaryColor,
-                                ),
-                          ),
-                        ),
-                      ),
-                      const Gap(16),
-                      Expanded(
-                        child: Card(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        // ignore: deprecated_member_use
+                        LightModeColors.primaryColor.withOpacity(0.1),
+                        Colors.white,
+                      ],
+                    ),
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Card(
                           elevation: 4,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: ListView(
+                          child: Padding(
                             padding: const EdgeInsets.all(16),
-                            children: [
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                child: CheckboxListTile(
-                                  title: Text(
-                                    "None of the above",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                            child: Text(
+                              "Select health issues for your $ageCategory ${isDog ? "Dog" : "Cat"}:",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: LightModeColors.primaryColor,
                                   ),
-                                  value: noneSelected,
-                                  activeColor: LightModeColors.primaryColor,
-                                  onChanged: (bool? value) {
-                                    noneSelectedNotifier.state = value ?? false;
-                                    if (value == true) {
-                                      selectedDiseasesNotifier.state = {};
-                                    }
-                                  },
-                                ),
-                              ),
-                              const Divider(),
-                              ...availableConditions.entries.map((entry) {
-                                final diseaseName = entry.key;
-                                final isSelected =
-                                    selectedDiseases.contains(diseaseName);
-                                return AnimatedContainer(
+                            ),
+                          ),
+                        ),
+                        const Gap(16),
+                        Expanded(
+                          child: Card(
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: ListView(
+                              padding: const EdgeInsets.all(16),
+                              children: [
+                                AnimatedContainer(
                                   duration: const Duration(milliseconds: 200),
                                   child: CheckboxListTile(
                                     title: Text(
-                                      diseaseName,
+                                      "None of the above",
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleMedium
@@ -151,88 +128,116 @@ class ThirdPage {
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
-                                    subtitle: Text(
-                                      entry.value,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                    value: isSelected,
+                                    value: noneSelected,
                                     activeColor: LightModeColors.primaryColor,
-                                    enabled: !noneSelected,
-                                    onChanged: noneSelected
-                                        ? null
-                                        : (bool? selected) {
-                                            if (selected == true) {
-                                              selectedDiseasesNotifier.update(
-                                                  (state) =>
-                                                      {...state, diseaseName});
-                                            } else {
-                                              selectedDiseasesNotifier
-                                                  .update((state) {
-                                                final updated =
-                                                    Set<String>.from(state);
-                                                updated.remove(diseaseName);
-                                                return updated;
-                                              });
-                                            }
-                                          },
+                                    onChanged: (bool? value) {
+                                      noneSelectedNotifier.state = value ?? false;
+                                      if (value == true) {
+                                        selectedDiseasesNotifier.state = {};
+                                      }
+                                    },
                                   ),
-                                );
-                              })
-                            ],
-                          ),
-                        ),
-                      ),
-                      const Gap(24),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            try {
-                              final userId = await UserService.getUserUuid();
-                              final petId = await PetsService()
-                                  .getFirstPetId(userId.toString());
-                              final dbRef =
-                                  FirebaseDatabase.instance.ref("userDetails");
-                              await dbRef
-                                  .child("$userId/Pets/$petId/HealthConditions")
-                                  .set({
-                                "conditions": noneSelected
-                                    ? []
-                                    : selectedDiseases.toList(),
-                                "hasNoConditions": noneSelected,
-                              });
-                              // ignore: use_build_context_synchronously
-                              await dbRef.child(userId).update({'hasPetProfile': true});
-
-                              // ignore: use_build_context_synchronously
-                              Future.microtask(() => context.router.replacePath('/home'));
-
-                              DebugLogger.print(
-                                  'Health conditions saved successfully');
-                            } catch (e) {
-                              DebugLogger.print('Error saving conditions: $e');
-                              rethrow;
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: LightModeColors.gradientTeal,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 32, vertical: 16),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                                ),
+                                const Divider(),
+                                ...availableConditions.entries.map((entry) {
+                                  final diseaseName = entry.key;
+                                  final isSelected =
+                                      selectedDiseases.contains(diseaseName);
+                                  return AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    child: CheckboxListTile(
+                                      title: Text(
+                                        diseaseName,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                      subtitle: Text(
+                                        entry.value,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
+                                      value: isSelected,
+                                      activeColor: LightModeColors.primaryColor,
+                                      enabled: !noneSelected,
+                                      onChanged: noneSelected
+                                          ? null
+                                          : (bool? selected) {
+                                              if (selected == true) {
+                                                selectedDiseasesNotifier.update(
+                                                    (state) =>
+                                                        {...state, diseaseName});
+                                              } else {
+                                                selectedDiseasesNotifier
+                                                    .update((state) {
+                                                  final updated =
+                                                      Set<String>.from(state);
+                                                  updated.remove(diseaseName);
+                                                  return updated;
+                                                });
+                                              }
+                                            },
+                                    ),
+                                  );
+                                })
+                              ],
                             ),
-                            elevation: 2,
-                          ),
-                          child: const Text(
-                            "Save and Continue",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ),
-                    ],
+                        const Gap(24),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              try {
+                                final userId = await UserService.getUserUuid();
+                                final petId = await PetsService()
+                                    .getFirstPetId(userId.toString());
+                                final dbRef =
+                                    FirebaseDatabase.instance.ref("userDetails");
+                                await dbRef
+                                    .child("$userId/Pets/$petId/HealthConditions")
+                                    .set({
+                                  "conditions": noneSelected
+                                      ? []
+                                      : selectedDiseases.toList(),
+                                  "hasNoConditions": noneSelected,
+                                });
+                                // ignore: use_build_context_synchronously
+                                await dbRef.child(userId).update({'hasPetProfile': true});
+                
+                                // ignore: use_build_context_synchronously
+                                Future.microtask(() => context.router.replacePath('/home'));
+                
+                                DebugLogger.print(
+                                    'Health conditions saved successfully');
+                              } catch (e) {
+                                DebugLogger.print('Error saving conditions: $e');
+                                rethrow;
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: LightModeColors.gradientTeal,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 32, vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 2,
+                            ),
+                            child: const Text(
+                              "Save and Continue",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

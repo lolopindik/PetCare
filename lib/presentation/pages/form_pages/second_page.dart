@@ -59,204 +59,211 @@ class SecondPage {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 32),
-        child: Column(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 12),
-              width: screenWidth,
-              height: screenHeight * 0.06,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 8,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: TextField(
-                  controller: searchController,
-                  style: const TextStyle(color: Colors.white, fontSize: 16),
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search,
-                        color: Colors.white70, size: 24),
-                    suffixIcon: searchController.text.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear,
-                                color: Colors.white70, size: 20),
-                            onPressed: () {
-                              searchController.clear();
-                              ref.read(searchQueryProvider.notifier).state = '';
-                            },
-                          )
-                        : null,
-                    hintText: 'Search for breeds...',
-                    hintStyle:
-                        const TextStyle(color: Colors.white54, fontSize: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 14),
-                    filled: true,
-                    fillColor: Colors.transparent,
-                  ),
-                  textInputAction: TextInputAction.search,
-                  onChanged: (value) {
-                    debounceTimer?.cancel();
-                    debounceTimer =
-                        Timer(const Duration(milliseconds: 300), () {
-                      ref.read(searchQueryProvider.notifier).state = value;
-                    });
-                  },
-                  onSubmitted: (value) {
-                    ref.read(searchQueryProvider.notifier).state = value;
-                  },
-                ),
-              ),
+        child: Center(
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: 600
             ),
-            const Gap(16),
-            Expanded(
-              child: breedsState.error != null
-                  ? Center(
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'Error: ${breedsState.error}',
-                              style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const Gap(12),
-                            ElevatedButton(
-                              onPressed: () => breedsNotifier.loadNextPage(),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).primaryColor,
-                                foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 24,
-                                  vertical: 12,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: const Text(
-                                'Retry',
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                          ],
-                        ),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 12),
+                  width: screenWidth,
+                  height: screenHeight * 0.06,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 8,
+                        offset: Offset(0, 4),
                       ),
-                    )
-                  : filteredBreeds.isEmpty && !breedsState.isLoading
+                    ],
+                  ),
+                  child: Center(
+                    child: TextField(
+                      controller: searchController,
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                      cursorColor: Colors.white,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.search,
+                            color: Colors.white70, size: 24),
+                        suffixIcon: searchController.text.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.clear,
+                                    color: Colors.white70, size: 20),
+                                onPressed: () {
+                                  searchController.clear();
+                                  ref.read(searchQueryProvider.notifier).state = '';
+                                },
+                              )
+                            : null,
+                        hintText: 'Search for breeds...',
+                        hintStyle:
+                            const TextStyle(color: Colors.white54, fontSize: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide.none,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
+                        filled: true,
+                        fillColor: Colors.transparent,
+                      ),
+                      textInputAction: TextInputAction.search,
+                      onChanged: (value) {
+                        debounceTimer?.cancel();
+                        debounceTimer =
+                            Timer(const Duration(milliseconds: 300), () {
+                          ref.read(searchQueryProvider.notifier).state = value;
+                        });
+                      },
+                      onSubmitted: (value) {
+                        ref.read(searchQueryProvider.notifier).state = value;
+                      },
+                    ),
+                  ),
+                ),
+                const Gap(16),
+                Expanded(
+                  child: breedsState.error != null
                       ? Center(
-                          child: Text(
-                            'No breeds found',
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Error: ${breedsState.error}',
+                                  style: const TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const Gap(12),
+                                ElevatedButton(
+                                  onPressed: () => breedsNotifier.loadNextPage(),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Theme.of(context).primaryColor,
+                                    foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 24,
+                                      vertical: 12,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Retry',
+                                    style: TextStyle(
+                                        fontSize: 14, fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         )
-                      : GridView.builder(
-                          controller: scrollController,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 12,
-                            mainAxisSpacing: 12,
-                            childAspectRatio: 0.75,
-                          ),
-                          itemCount: filteredBreeds.length +
-                              (breedsState.isLoading ? 6 : 0),
-                          itemBuilder: (context, index) {
-                            if (index >= filteredBreeds.length &&
-                                breedsState.isLoading) {
-                              return _buildSkeletonCard();
+                      : filteredBreeds.isEmpty && !breedsState.isLoading
+                          ? Center(
+                              child: Text(
+                                'No breeds found',
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                          : GridView.builder(
+                              controller: scrollController,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                                childAspectRatio: 0.75,
+                              ),
+                              itemCount: filteredBreeds.length +
+                                  (breedsState.isLoading ? 6 : 0),
+                              itemBuilder: (context, index) {
+                                if (index >= filteredBreeds.length &&
+                                    breedsState.isLoading) {
+                                  return _buildSkeletonCard();
+                                }
+            
+                                final breed = filteredBreeds[index];
+                                return _buildBreedCard(breed, index, ref);
+                              },
+                            ),
+                ),
+                if (!breedsState.hasMore &&
+                    searchQuery.isEmpty &&
+                    breedsState.error == null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Text(
+                      'No more breeds to load',
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                if (breedsState.breeds.isNotEmpty && breedsState.error == null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: ElevatedButton(
+                      onPressed: (breedSelected.selectedIndex > -1 &&
+                              breedSelected.selectedBreed.isNotEmpty)
+                          ? () async {
+                            try {
+                              final String breed = breedSelected.selectedBreed;
+                              SecondPageModel breedModel = SecondPageModel(breed: breed);
+                              Map<String, dynamic> data = breedModel.toMap();
+            
+                              SaveSecondPage().saveForm(data);
+                              stepIncrement();
+            
+                            } catch (e) {
+                              DebugLogger.print('$e');
+                              rethrow; 
                             }
-
-                            final breed = filteredBreeds[index];
-                            return _buildBreedCard(breed, index, ref);
-                          },
+                          }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: LightModeColors.gradientTeal,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 14,
                         ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 4,
+                        shadowColor: Colors.black,
+                      ),
+                      child: const Text(
+                        'Continue',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
-            if (!breedsState.hasMore &&
-                searchQuery.isEmpty &&
-                breedsState.error == null)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(
-                  'No more breeds to load',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            if (breedsState.breeds.isNotEmpty && breedsState.error == null)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: ElevatedButton(
-                  onPressed: (breedSelected.selectedIndex > -1 &&
-                          breedSelected.selectedBreed.isNotEmpty)
-                      ? () async {
-                        try {
-                          final String breed = breedSelected.selectedBreed;
-                          SecondPageModel breedModel = SecondPageModel(breed: breed);
-                          Map<String, dynamic> data = breedModel.toMap();
-
-                          SaveSecondPage().saveForm(data);
-                          stepIncrement();
-
-                        } catch (e) {
-                          DebugLogger.print('$e');
-                          rethrow; 
-                        }
-                      }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: LightModeColors.gradientTeal,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 14,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 4,
-                    shadowColor: Colors.black,
-                  ),
-                  child: const Text(
-                    'Continue',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-          ],
+          ),
         ),
       ),
     );
