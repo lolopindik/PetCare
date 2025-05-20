@@ -1,7 +1,7 @@
+// lib/logic/services/firebase/user_service.dart
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserService {
-
   static Future<User?> getUser() async {
     final user = FirebaseAuth.instance.currentUser;
     return user;
@@ -12,6 +12,6 @@ class UserService {
     if (user != null) {
       return user.uid;
     }
-    return 'unknow';
+    return 'unknown';
   }
 }

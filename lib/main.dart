@@ -14,16 +14,16 @@ Future main() async {
   await dotenv.load(fileName: ".env");
   //* Firebase init
   WidgetsFlutterBinding.ensureInitialized();
-  // if (Firebase.apps.isEmpty) {
-  //   await Firebase.initializeApp(
-  //     name: "pet_care",
-  //     options: DefaultFirebaseOptions.currentPlatform,
-  //   );
-  // }
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      name: "pet_care",
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
   //* For web deploy
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.web
-  );
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.web
+  // );
   //* Local storage
   await Hive.initFlutter();
   var themeBox = await Hive.openBox('AppTheme');
@@ -44,10 +44,10 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       debugShowMaterialGrid: false,
-      //* For web deploy
-      // scrollBehavior: AppScrollBehavior(),
       theme: ref.watch(themeProvider).themeData,
       routerConfig: appRouter.config(),
+      //* For web deploy
+      // scrollBehavior: AppScrollBehavior(),
     );
   }
 }

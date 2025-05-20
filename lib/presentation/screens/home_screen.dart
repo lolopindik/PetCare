@@ -1,3 +1,4 @@
+// lib/presentation/pages/home_screen.dart
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,26 +13,39 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final hasPetProfileAsync = ref.watch(hasPetProfileProvider);
 
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: MediaQuery.of(context).size.height * 0.08,
         centerTitle: true,
-        title: Image.asset('lib/logic/src/assets/imgs/logo.png',
-            height: MediaQuery.of(context).size.height * 0.3),
-        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+        title: Image.asset(
+          'lib/logic/src/assets/imgs/logo.png',
+          height: MediaQuery.of(context).size.height * 0.3,
+        ),
+        leading: hasPetProfileAsync.when(
+            data: (data) => (data)
+                ? IconButton(
+                    onPressed: () => context.router.pushPath('/settings'),
+                    icon: Icon(Icons.settings))
+                : SizedBox(),
+            error: (err, stack) =>
+                const Center(child: Text('Error on loading...')),
+            loading: () => SizedBox()),
       ),
       body: hasPetProfileAsync.when(
         data: (hasPetProfile) {
-          return hasPetProfile ? HomePage().build(context) : TemporaryPage().build(context, ref);
+          return hasPetProfile
+              ? HomePage().build(context, ref) // Pass ref to build
+              : TemporaryPage().build(context, ref);
         },
-        loading: () => const Center(child: CupertinoActivityIndicator(
-              animating: true,
-              radius: 15,
-            ),),
-        error: (err, stack) => Center(child: Text('Error on loading...')),
+        loading: () => const Center(
+          child: CupertinoActivityIndicator(
+            animating: true,
+            radius: 15,
+          ),
+        ),
+        error: (err, stack) => const Center(child: Text('Error on loading...')),
       ),
     );
   }
