@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:pet_care/data/model/pet_form_model.dart';
 import 'package:pet_care/logic/funcs/debug_logger.dart';
 import 'package:pet_care/logic/riverpod/api_providers.dart';
-import 'package:pet_care/logic/riverpod/pet_form.dart' show breedProvider, stepProvider;
+import 'package:pet_care/logic/riverpod/pet_form.dart'
+    show breedProvider, stepProvider;
 import 'package:pet_care/logic/services/firebase/form_service.dart';
 import 'package:pet_care/logic/theme/theme_constants.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -61,9 +63,7 @@ class SecondPage {
         padding: const EdgeInsets.symmetric(vertical: 32),
         child: Center(
           child: Container(
-            constraints: BoxConstraints(
-              maxWidth: 600
-            ),
+            constraints: BoxConstraints(maxWidth: 600),
             child: Column(
               children: <Widget>[
                 Container(
@@ -95,13 +95,14 @@ class SecondPage {
                                     color: Colors.white70, size: 20),
                                 onPressed: () {
                                   searchController.clear();
-                                  ref.read(searchQueryProvider.notifier).state = '';
+                                  ref.read(searchQueryProvider.notifier).state =
+                                      '';
                                 },
                               )
                             : null,
                         hintText: 'Search for breeds...',
-                        hintStyle:
-                            const TextStyle(color: Colors.white54, fontSize: 16),
+                        hintStyle: const TextStyle(
+                            color: Colors.white54, fontSize: 16),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
                           borderSide: BorderSide.none,
@@ -149,9 +150,11 @@ class SecondPage {
                                 ),
                                 const Gap(12),
                                 ElevatedButton(
-                                  onPressed: () => breedsNotifier.loadNextPage(),
+                                  onPressed: () =>
+                                      breedsNotifier.loadNextPage(),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Theme.of(context).primaryColor,
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
                                     foregroundColor: Colors.white,
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 24,
@@ -164,7 +167,8 @@ class SecondPage {
                                   child: const Text(
                                     'Retry',
                                     style: TextStyle(
-                                        fontSize: 14, fontWeight: FontWeight.w600),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ],
@@ -198,7 +202,7 @@ class SecondPage {
                                     breedsState.isLoading) {
                                   return _buildSkeletonCard();
                                 }
-            
+
                                 final breed = filteredBreeds[index];
                                 return _buildBreedCard(breed, index, ref);
                               },
@@ -225,19 +229,20 @@ class SecondPage {
                       onPressed: (breedSelected.selectedIndex > -1 &&
                               breedSelected.selectedBreed.isNotEmpty)
                           ? () async {
-                            try {
-                              final String breed = breedSelected.selectedBreed;
-                              SecondPageModel breedModel = SecondPageModel(breed: breed);
-                              Map<String, dynamic> data = breedModel.toMap();
-            
-                              SaveSecondPage().saveForm(data);
-                              stepIncrement();
-            
-                            } catch (e) {
-                              DebugLogger.print('$e');
-                              rethrow; 
+                              try {
+                                final String breed =
+                                    breedSelected.selectedBreed;
+                                SecondPageModel breedModel =
+                                    SecondPageModel(breed: breed);
+                                Map<String, dynamic> data = breedModel.toMap();
+
+                                SaveSecondPage().saveForm(data);
+                                stepIncrement();
+                              } catch (e) {
+                                DebugLogger.print('$e');
+                                rethrow;
+                              }
                             }
-                          }
                           : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: LightModeColors.gradientTeal,
@@ -304,7 +309,10 @@ class SecondPage {
                       placeholder: (context, url) => Container(
                         color: Colors.grey[200],
                         child: const Center(
-                          child: CircularProgressIndicator(),
+                          child: CupertinoActivityIndicator(
+                            animating: true,
+                            radius: 15,
+                          ),
                         ),
                       ),
                       errorWidget: (context, url, error) => Container(

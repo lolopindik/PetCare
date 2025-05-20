@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pet_care/logic/services/firebase/pets_service.dart';
@@ -236,9 +237,10 @@ class SettingsPage {
           builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(
-                  color: LightModeColors.gradientTeal,
-                ),
+                child: CupertinoActivityIndicator(
+              animating: true,
+              radius: 15,
+            ),
               );
             } else if (snapshot.hasError) {
               return Center(

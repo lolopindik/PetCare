@@ -14,16 +14,10 @@ class HomePage {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: RefreshIndicator(
           onRefresh: () async {
-            // Invalidate the providers to trigger a data refresh
+            ref.invalidate(petRecommendationProvider);
             ref.invalidate(foodProvider);
             ref.invalidate(vitaminsProvider);
             ref.invalidate(medicinesProvider);
-            // Wait for the providers to refresh
-            await Future.wait([
-              ref.refresh(foodProvider.future),
-              ref.refresh(vitaminsProvider.future),
-              ref.refresh(medicinesProvider.future),
-            ]);
             DebugLogger.print('Data refreshed via pull-to-refresh');
           },
           color: LightModeColors.gradientTeal,
@@ -31,6 +25,7 @@ class HomePage {
           child: CustomScrollView(
             slivers: [
               SliverAppBar(
+                automaticallyImplyLeading: false,
                 floating: true,
                 pinned: false,
                 backgroundColor: LightModeColors.primaryColor,
@@ -97,7 +92,8 @@ class HomePage {
                     child: CupertinoActivityIndicator(radius: 16),
                   ),
                   error: (err, stack) {
-                    DebugLogger.print('Error loading $title: $err\nStack: $stack');
+                    DebugLogger.print(
+                        'Error loading $title: $err\nStack: $stack');
                     return Center(
                       child: Text(
                         'Failed to load $title: $err',
@@ -115,7 +111,8 @@ class HomePage {
     );
   }
 
-  Widget _buildItemList(BuildContext context, List<Map<String, dynamic>> items) {
+  Widget _buildItemList(
+      BuildContext context, List<Map<String, dynamic>> items) {
     if (items.isEmpty) {
       return const Center(
         child: Text(
@@ -170,7 +167,8 @@ class HomePage {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(16)),
                 child: isImageUrlValid
                     ? CachedNetworkImage(
                         imageUrl: imageUrl,
@@ -181,13 +179,15 @@ class HomePage {
                           height: 100,
                           color: Colors.grey.shade200,
                           child: const Center(
-                            child: CircularProgressIndicator(
-                              color: LightModeColors.gradientTeal,
+                            child: CupertinoActivityIndicator(
+                              animating: true,
+                              radius: 15,
                             ),
                           ),
                         ),
                         errorWidget: (context, url, error) {
-                          DebugLogger.print('Image load error for $title: $url - Error: $error');
+                          DebugLogger.print(
+                              'Image load error for $title: $url - Error: $error');
                           return Container(
                             height: 100,
                             color: Colors.grey.shade200,
