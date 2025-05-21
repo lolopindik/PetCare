@@ -22,19 +22,19 @@ ______    _   _____
 <h2>Screenshots</h2>
 <table>
   <tr>
-    <td align="center"><img src="https://github.com/user-attachments/assets/15897b58-84ce-4348-b4e8-dc3fbd01499d" width="200"><br>Home Page</td>
-    <td align="center"><img src="https://github.com/user-attachments/assets/5bf1e2fa-df43-4b3a-bf1b-2e8a38d617e2" width="200"><br>User Profile</td>
-    <td align="center"><img src="https://github.com/user-attachments/assets/c401c0a6-e20c-4c5d-9503-cc06a0df51e3" width="200"><br>Recommendations</td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/15897b58-84ce-4348-b4e8-dc3fbd01499d" width="200"><br>Sign Up</td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/5bf1e2fa-df43-4b3a-bf1b-2e8a38d617e2" width="200"><br>Login</td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/c401c0a6-e20c-4c5d-9503-cc06a0df51e3" width="200"><br>Sign in with Google</td>
   </tr>
   <tr>
-    <td align="center"><img src="https://github.com/user-attachments/assets/9fdfa592-680c-4ac4-a406-bde5c476aaeb" width="200"><br>Breed Information</td>
-    <td align="center"><img src="https://github.com/user-attachments/assets/7b9a639e-c374-4de1-a469-86166e805d39" width="200"><br>Product Selection</td>
-    <td align="center"><img src="https://github.com/user-attachments/assets/17db543d-ffe5-4ea2-aaa6-68535407cf49" width="200"><br>Settings</td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/9fdfa592-680c-4ac4-a406-bde5c476aaeb" width="200"><br>Add pet profile</td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/7b9a639e-c374-4de1-a469-86166e805d39" width="200"><br>Form: page one</td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/17db543d-ffe5-4ea2-aaa6-68535407cf49" width="200"><br>Form: page two</td>
   </tr>
   <tr>
-    <td align="center"><img src="https://github.com/user-attachments/assets/63c65d13-5545-4515-8986-33677ece8553" width="200"><br>Login</td>
-    <td align="center"><img src="https://github.com/user-attachments/assets/3ca736c4-1fef-4fcf-87d9-d908ec8b34e5" width="200"><br>Registration</td>
-    <td align="center"><img src="https://github.com/user-attachments/assets/a8e45fec-bc73-4121-84f1-878e52b42429" width="200"><br>Dashboard</td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/63c65d13-5545-4515-8986-33677ece8553" width="200"><br>Form: page three</td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/3ca736c4-1fef-4fcf-87d9-d908ec8b34e5" width="200"><br>Recommendations</td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/a8e45fec-bc73-4121-84f1-878e52b42429" width="200"><br>Settings</td>
   </tr>
 </table>
 
